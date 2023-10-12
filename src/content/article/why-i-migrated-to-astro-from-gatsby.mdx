@@ -7,6 +7,7 @@ excerpt: "Read about why I decided to migrate my website to Astro. What I'm liki
 
 import ColorLink from '../../components/ColorLink.astro';
 import Divider from '../../components/Divider.astro';
+import TweetLink from '../../components/TweetLink.astro';
 
 <p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl"><em>TLDR;</em> Boredom. Also to learn something new.</p>
 
@@ -15,6 +16,8 @@ import Divider from '../../components/Divider.astro';
 <Divider></Divider>
 
 <h2 class="text-white light-mode:text-gray-800 text-2xl italic mb-4">What is Astro?</h2>
+
+<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">Astro and Gatsby are both static site generators, but they have different approaches and features. It compiles your site into highly optimized static assets, but unlike Gatsby, it doesn't generate full HTML for all pages. Instead, it generates JavaScript bundles and loads only the necessary components for a given route, which can lead to faster initial loading times. In theory at least.</p>
 
 <p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">Their website says it is an all-in-one web framework for building fast, content-focused websites. And it is. Features that got me interested was <em>server-first API design</em>, <em>zero JS by default</em>, <em>edge-ready</em> and <em>UI-agnostic</em>. Read more about the framework and its key features <ColorLink color="red" href="https://docs.astro.build/en/getting-started/">here</ColorLink>.</p>
 
@@ -32,6 +35,8 @@ import Divider from '../../components/Divider.astro';
 
 <p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">It is really fast. And JSON is a first-class citizen.</p>
 
+<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">Astro introduces its own concept of components, which are more focused on static site generation and partial hydration. Instead of sending the entire JavaScript bundle for a page, only the necessary components are hydrated, improving initial load times.</p>
+
 <p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">Beside providing Astro components, you can use any other JS components - either from React, Vue or Svelte. This means that I was able to quickly use my existing ustom React components from Gatsby here.</p>
 
 <p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">MDX support almost out of the box as well as easy syntax highlighting was a plus too.</p>
@@ -42,4 +47,8 @@ import Divider from '../../components/Divider.astro';
 
 <h2 class="text-white light-mode:text-gray-800 text-2xl italic mb-4">What am I disliking?</h2>
 
-<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">Using existing React components 🤪 Why? Because Astro components looks nicer and everything works out of the box - like experimental browser view transitions. For React components I need to do extra coding to get page /content transition to work.</p>
+<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">Using existing React components 🤪 Why? Because code structure for Astro components looks nicer and everything works out of the box - like experimental browser view transitions. For React components I need to do extra coding to get page /content transition to work.</p>
+
+<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">
+    If you like this article consider <TweetLink text={ `Why I Migrated to Astro from Gatsby on https://lukapeharda.com/article/why-i-migrated-to-astro-from-gatsby/ by @lukapeharda` }>tweeting</TweetLink> or check out my other <ColorLink href="/articles" color="red">articles</ColorLink>.
+</p>
