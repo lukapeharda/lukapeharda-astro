@@ -1,0 +1,120 @@
+---
+title: "How to Refactor a Method With Optional Params"
+url: "/article/refactoring-optional-method-params/"
+date: "2022-02-25"
+excerpt: "While refactoring and optimising legacy code I've ran into a method signature inconsistency which caused performance issues and was being done without developer intention."
+---
+
+import Divider from '../../components/Divider.astro';
+import ColorLink from '../../components/ColorLink.astro';
+import TweetLink from '../../components/TweetLink.astro';
+
+<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">While refactoring and optimising legacy code I've ran into a method signature (optional parameters) inconsistency which caused performance issues as part of the expensive operation was being done without developer intention.</p>
+
+```php
+class PageRepository
+{
+    ...
+    public function find($pageId, $prerender = false)
+    {
+        ...
+        if ($prerender === true) {
+            $page->prerender();
+        }
+        ...
+        return $page;
+    }
+
+    public function findOrFail($pageId, $prerender = true)
+    {
+        $page = $this->find($pageId, $prerender);
+
+        if ($page === null) {
+            throw new Exception("Page $pageId not found.");
+        }
+
+        return $page
+    }
+    ...
+}
+```
+
+<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">Our <span class="text-white italic">PageRepository::find</span> method had an optional parameter called <span class="text-white italic">$prerender</span> which was set to <span class="text-white italic">false</span> by default. The problem is that the method <span class="text-white italic">PageRepository::findOrFail</span> has the same optional parameter but its default value set to <span class="text-white italic">true</span>! </p>
+
+<Divider></Divider>
+
+<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">If you're not careful reading method signature and default param values you can easily make a mistake and <strong class="bg-gray-700 light-mode:bg-gray-200">prerender</strong> a page (which is an expensive operation) without wanting or needing it.</p>
+<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">Methods with optional <strong class="bg-gray-700 light-mode:bg-gray-200">flag</strong> parameters can potentially be dangerous and can be hard to glance at.</p>
+
+<Divider></Divider>
+
+<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">There are a couple of things that can be done here in order for it to be better and more readable.</p>
+
+<Divider></Divider>
+
+<h2 class="text-white light-mode:text-gray-800 text-2xl italic mt-8 mb-4"><span class="text-e6n-red text-white mr-4">1.</span> Change optional parameter default values to the same value</h2>
+<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">This one is a no brainer. Just change the <span class="text-white italic">PageRepository::findOrFail</span> optional <span class="text-white italic">$prerender</span> default value to <span class="text-white italic">false</span> (or vice-versa). </p>
+
+<Divider></Divider>
+
+<h2 class="text-white light-mode:text-gray-800 text-2xl italic mt-8 mb-4"><span class="text-e6n-yellow text-white mr-4">2.</span> Specify optional param value</h2>
+<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">Just specify a value explicitly so anyone reading your code (even you a couple of months in the future) will know that you’ve set it and used it intentionally.</p>
+
+```php
+$pageRepository = new PageRepository();
+
+$page = $pageRepository->find($pageId, false);
+```
+<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">Or even better, use the variable with a semantic meaning when calling the method.</p>
+```php
+$pageRepository = new PageRepository();
+
+$page = $pageRepository->find($pageId, $prerender = false);
+```
+<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl"><em class="text-gray-500">I know that some linters or IDEs may highlight the <span class="text-white italic">$prerender</span> param but there are several ways to deal with it and I'm leaving it at your discretion to chose a way how to handle it.</em></p>
+
+<Divider></Divider>
+
+<h2 class="text-white light-mode:text-gray-800 text-2xl italic mt-8 mb-4"><span class="text-e6n-green text-white mr-4">3.</span> Refactor the method with optional flag parameter into two distinct methods</h2>
+<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">Remove the <span class="text-white italic">$page-&gt;prerender()</span> call from the <span class="text-white italic">PageRepository::find</span> method and extract it to a separate <span class="text-white italic">PageRepository::findAndPrerender</span> method.</p>
+
+```php
+class PageRepository
+{
+    ...
+    public function find($pageId, $prerender = false)
+    {
+        ...
+        if ($prerender === true) {
+            $page->prerender();
+        }
+        ...
+
+        return $page;
+    }
+
+    public function findAndPrerender($pageId)
+    {
+        $page = $this->find($pageId, $prerender);
+
+        if ($page === null) {
+            throw new Exception("Page $pageId not found.");
+        }
+
+        return $page;
+    }
+    ...
+}
+```
+
+<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">This way you have to make an intentional effort to chose which functionality (or rather which side-effect) you require.</p>
+
+<Divider></Divider>
+
+<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">This was just a quick refactoring tip which I'm usually <span class="line-through">enforcing</span> suggesting while doing code reviews in order to make code easily understandable and to avoid confusion.</p>
+
+<Divider></Divider>
+
+<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">
+    If you like this article consider <TweetLink text={ `Refactoring Optional Method Params on https://lukapeharda.com/article/refactoring-optional-method-params by @lukapeharda` }>tweeting</TweetLink> or check out my other <ColorLink href="/articles" color="red">articles</ColorLink>.
+</p>

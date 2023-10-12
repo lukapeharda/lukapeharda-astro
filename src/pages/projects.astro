@@ -1,0 +1,12 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import ActiveProjects from '../components/ActiveProjects.jsx';
+
+import { getCollection } from 'astro:content';
+
+const activeProjects = await getCollection('activeProjects');
+---
+
+<MainLayout title="Side projects" description="List of all my side projects">
+    <ActiveProjects projects={ activeProjects } client:idle></ActiveProjects>
+</MainLayout>

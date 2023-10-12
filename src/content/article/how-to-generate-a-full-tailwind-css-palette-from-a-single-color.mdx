@@ -1,0 +1,128 @@
+---
+title: "How to generate a full Tailwind CSS palette from a single color"
+url: "/article/how-to-generate-a-full-tailwind-css-palette-from-a-single-color/"
+date: "2022-04-27"
+excerpt: "You have an app where you allow users to select their brand color in order to style their website. Naturally, you use different shades of the color in your design - in some places you use ligher ones, and in other darker ones. But the problem is ..."
+---
+
+import Divider from '../../components/Divider.astro';
+import ColorLink from '../../components/ColorLink.astro';
+import TweetLink from '../../components/TweetLink.astro';
+
+<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">You have an app where you allow users to select their brand color in order to style their website. Naturally, you use different shades of the color in your design - in some places you use ligher ones, and in other darker ones.</p>
+
+<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">There are a lot of color generators and app that generate Tailwind CSS color palette for you. Here are some of my favorites:</p>
+
+<ul class="list-disc pl-4">
+    <li class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl"><ColorLink color="green" href="https://uicolors.app/create">Create Tailwind CSS color families</ColorLink></li>
+    <li class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl"><ColorLink color="yellow" href="https://colorbox.io/">ColorBox</ColorLink></li>
+    <li class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl"><ColorLink color="blue" href="https://tailwindcss.com/docs/customizing-colors#generating-colors">Generating Colors (from Tailwind CSS docs)</ColorLink></li>
+</ul>
+
+<Divider></Divider>
+
+<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">Problem is, you want to have a simple UI and the thought of forcing users to select all possible shades gives you a headache.</p>
+
+<Divider></Divider>
+
+<h2 class="text-white light-mode:text-gray-800 text-2xl italic mb-4">Solution 1. "Opacity"</h2>
+
+<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">Official <ColorLink color="red" href="https://www.youtube.com/watch?v=MAtaT8BZEAo">theming video from Tailwind CSS</ColorLink> suggests adding a single (<em>brand</em>) color and then modify opacity (either text opacity or background opacity) to have lighter shades of your color.</p>
+
+```html
+<h1 class="text-brand text-opacity-75">Howdy</h1>
+```
+
+<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">Under the hood Tailwind CSS uses CSS variables to modify alpha channel of the color (<em>A in RGBA color model</em>) which is pretty smart. Please watch the above YouTube video to see more detailed explanation but the gist of it is this:</p>
+
+```css
+.text-brand {
+    --tw-text-opacity: 1;
+    color: rgba(255, 255, 0, --tw-text-opacity);
+}
+```
+
+<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">This is fine and dandy but what to do when you want to have darker colors as well? You could start with a darker color and have a greater range. Can you tell your users to select "darker" color? No. You can't. You shouldn't.</p>
+
+<Divider></Divider>
+
+<h2 class="text-white light-mode:text-gray-800 text-2xl italic mb-4">Solution 2. "HSL"</h2>
+
+<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">For this reason I've been playing with <em>HSL</em> color model (<em>where H stands for hue, S for saturation and L for lightness</em>). By changing the <em>L</em> values (lightness) of a base color I was able to get OK looking palette for the whole range - both lighter and darker.</p>
+
+<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">I've written a PHP package called <ColorLink color="green" href="https://github.com/lukapeharda/tailwindcss-color-palette-generator">Tailwind CSS Color Palette Generator</ColorLink> to use exactly this to generate a full palette.</p>
+
+<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">It is easy to generate a palette by specifying your base color:</p>
+
+```php
+use LukaPeharda\\TailwindCssColorPaletteGenerator\\Color;
+use LukaPeharda\\TailwindCssColorPaletteGenerator\\PaletteGenerator;
+
+// Create base color from hex
+$baseColor = Color::fromHex('#ffff00');
+
+// or from RGB
+$baseColor = Color::fromRgb(255, 255, 0);
+
+// or from HSL
+$baseColor = Color::fromHsl(60, 100, 50);
+
+// Generate a palette
+$paletteGenerator = new PaletteGenerator;
+$paletteGenerator->setBaseColor($baseColor);
+$palette = $paletteGenerator->getPalette();
+```
+
+<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">Generated <span class="text-white italic">$palette</span> will be an array where keys are Tailwind CSS color steps and values <span class="text-white italic">Color</span> objects:</p>
+```php
+$palette = [
+    50 => Color,
+    100 => Color,
+    200 => Color,
+    300 => Color,
+    ...
+];
+```
+
+<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">You can then loop over it to generate CSS variables or use it anyway you see fit:</p>
+
+```php
+foreach ($palette as $key => $color) {
+    echo '--color-brand-' . $key . ': #' . $color->getHex() . ';';
+}
+```
+
+<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">Extend color settings in your <span class="text-white italic">tailwind.config.js</span> file and add <span class="text-white italic">brand</span> color palette:</p>
+```js
+module.exports = {
+    theme: {
+        extend: {
+            colors: {
+                brand: {
+                    50: 'var(--color-brand-50, #F5F3FF)',
+                    100: 'var(--color-brand-100, #EDE9FE)',
+                    200: 'var(--color-brand-200, #DDD6FE)',
+                    300: 'var(--color-brand-300, #C4B5FD)',
+                    400: 'var(--color-brand-400, #A78BFA)',
+                    500: 'var(--color-brand-500, #8B5CF6)',
+                    600: 'var(--color-brand-600, #7C3AED)',
+                    700: 'var(--color-brand-700, #6D28D9)',
+                    800: 'var(--color-brand-800, #5B21B6)',
+                    900: 'var(--color-brand-900, #4C1D95)',
+                }
+            }
+        }
+    }
+}
+```
+
+<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">Afterwards you can use your color as regular CSS Tailwind class, for example as <span class="text-white italic">text-brand-100</span> or <span class="text-white italic">bg-brand-300</span>.</p>
+<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">Documentation and settings for fine tunning can be found <ColorLink color="yellow" href="https://github.com/lukapeharda/tailwindcss-color-palette-generator">here</ColorLink>.</p>
+
+<Divider></Divider>
+
+<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">Generated palettes are not as great as the ones from the official Tailwind CSS color palettes but hey, those were carefully hand picked.</p>
+
+<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">
+    If you like this article consider <TweetLink text={ `How to generate a full Tailwind CSS palette from a single color on https://lukapeharda.com/article/how-to-generate-a-full-Tailwind-CSS-palette-from-a-single-color/ by @lukapeharda` }>tweeting</TweetLink> or check out my other <ColorLink href="/articles" color="red">articles</ColorLink>.
+</p>

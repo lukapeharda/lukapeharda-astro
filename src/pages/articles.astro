@@ -1,0 +1,14 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+import BlogArticles from "../components/BlogArticles.jsx";
+
+import { getCollection } from 'astro:content';
+
+const articles = (await getCollection('article')).sort(
+    (a, b) => parseInt(b.data.date.replaceAll('-', '')) - parseInt(a.data.date.replaceAll('-', ''))
+);
+---
+
+<MainLayout title="Articles" description="Articles written by Luka Peharda">
+    <BlogArticles articles={ articles } client:load></BlogArticles>
+</MainLayout>

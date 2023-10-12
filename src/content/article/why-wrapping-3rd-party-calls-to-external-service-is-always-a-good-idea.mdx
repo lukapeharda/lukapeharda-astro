@@ -1,0 +1,106 @@
+---
+title: "Why wrapping 3rd-party calls to external services is always a good idea"
+url: "/article/why-wrapping-3rd-party-calls-to-external-service-is-always-a-good-idea/"
+date: "2022-03-31"
+excerpt: "When using a 3rd-party package that makes calls (or API requests) to an external service it is always a good idea to wrap 3rd-party service with a thin wrapper (Facade)."
+---
+
+import Divider from '../../components/Divider.astro';
+import ColorLink from '../../components/ColorLink.astro';
+import TweetLink from '../../components/TweetLink.astro';
+
+<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">When using a 3rd-party package that makes calls (or API requests) to an external service it is always a good idea to wrap 3rd-party service with a thin wrapper (Facade). Why?</p>
+<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">Wrapping it avoids vendor lock-in and tight coupling. Imagine that the API the 3rd-party is using stops working. Now you need to change service calls across your whole project. If wrapped, you only need to modify your code once.</p>
+<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">Another reason is that you can then build and setup the 3rd-party service (or the client) according to your requirements.</p>
+<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">Let me give you an example:</p>
+
+```php
+...
+
+use Kourses\\Website;
+use Mpociot\\VatCalculator\\VatCalculator;
+
+...
+
+class VatHelper
+{
+    protected $calculator;
+
+    public function __construct(Website $website)
+    {
+        $calculator = new VatCalculator();
+        $calculator->setBusinessCountryCode($website->user->country);
+
+        $this->calculator = $calculator;
+    }
+
+    ...
+}
+```
+
+<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">In my project, I'm using <span class="text-white italic">driesvints/vat-calculator</span> package to calculate VAT (value-added tax) rate and to validate the EU VAT number. EU VAT number validation is being done by calling an external API.</p>
+<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">As VAT rate calculation needs to take into account your business location, I need to provide the business country code when setting up the calculator. As a product I'm working on is a SaaS, I need to specify this param on each request and can't do it through configuration files (which this package supports). So I'm "building" up the VatCalculator according to my requirements.</p>
+<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">If I did not wrap this service, I would have to configure it each time I call it. Not a big deal I know, but this is a simple example.</p>
+
+<Divider></Divider>
+
+<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">Besides doing a simple "wrapping" I've added a couple of methods that slightly modify 3rd-party service behavior.</p>
+
+
+```php
+...
+
+use Kourses\Member;
+use Kourses\Errors\VatValidationException;
+
+use Exception;
+
+class VatHelper
+{
+    ...
+
+    public function isValidVatId(string $vatNumber): bool
+    {
+        try {
+            return $this->calculator->isValidVATNumber($vatNumber);
+        } catch (Exception $exception) {
+            throw new VatValidationException("VAT validation failed.", 500);
+        }
+    }
+
+    public function getTaxRate(
+        string $countryCode,
+        string $postalCode = null,
+        string $vatNumber = null
+    ): float {
+        $isCompany = $this->isValidVatId($vatNumber);
+
+        return $this->calculator->getTaxRateForLocation(
+            $countryCode,
+            $postalCode,
+            $isCompany
+        );
+    }
+
+    public function getTaxRateForMember(Member $member): float
+    {
+        return $this->getTaxRate($member->country, $member->zip, $member->vat_id);
+    }
+}
+```
+
+<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">In method <span class="text-white italic">isValidVatId</span> I'm catching a 3rd-party service exception and re-throwing it using a message (and code) that is in sync with my app. Now I don't need to catch 3rd-party package exceptions in my controllers.</p>
+<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">If I decide to change this 3rd-party package I wouldn't have to go through my code and change all mentions of this package.</p>
+<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">In <span class="text-white italic">getTaxRate</span> method, I've also slightly altered behavior which suits my flow better. I'm validating the VAT number before getting the tax rate for the user's location (as it is dependent on your business location as well as your customers' location).</p>
+<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">Method <span class="text-white italic">getTaxRateForMember</span> is a simple helper which allows me to easily pass my <span class="text-white italic">$member</span> object and get its current VAT rate without needing to "spread" required params.</p>
+
+<Divider></Divider>
+
+<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">Using this technique you could easily implement caching in front of external service calls if need be. Here, as the VAT number checked should be different each time I'm not doing that.</p>
+<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">This wrapper borrows from a Facade design pattern, a Proxy, and even a Decorator. If you wish to learn more about design patterns be sure to check out <ColorLink href="https://www.mrlacey.com/2020/07/youve-only-added-two-lines-why-did-that.html" color="red">https://refactoring.guru/design-patterns</ColorLink> as they have a nice overview of basic patterns as well as real-world examples.</p>
+
+<Divider></Divider>
+
+<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">
+    If you like this article consider <TweetLink text={ `Why wrapping 3rd-party calls to external services is always a good idea on https://lukapeharda.com/article/why-wrapping-3rd-party-calls-to-external-service-is-always-a-good-idea by @lukapeharda` }>tweeting</TweetLink> or check out my other <ColorLink href="/articles" color="red">articles</ColorLink>.
+</p>

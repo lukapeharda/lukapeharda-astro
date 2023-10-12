@@ -1,0 +1,11 @@
+---
+import Menu from './Menu.jsx';
+import SiteTitle from './SiteTitle.jsx';
+---
+
+<nav class="bg-e6n-black light-mode:bg-white">
+    <div class="flex flex-wrap items-center justify-between p-4 md:p-8">
+        <SiteTitle client:idle />
+        <Menu currentPathName={ Astro.url.pathname } client:idle />
+    </div>
+</nav>

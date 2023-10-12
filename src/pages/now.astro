@@ -1,0 +1,21 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+
+const now = new Date('2023-04-05');
+---
+
+<MainLayout title="What I'm doing right now" description="This page tells you what I'm working on at the moment and what are my current interests">
+    <div class="flex-grow bg-e6n-black light-mode:bg-white">
+        <div class="h-full w-full xl:w-1/2 md:w-2/3 p-4 md:p-8 text-content">
+            <p class="pb-3 text-white light-mode:text-slate-800 text-xl">This isn't an <a class="border-b border-e6n-red hover:bg-e6n-red" href="/about">about</a> page.</p>
+            <p class="text-white light-mode:text-slate-800 text-xl">It's <a class="border-b border-e6n-blue hover:bg-e6n-blue" href="https://nownownow.com/about/" target="_blank">now</a> page. It tells you what I'm working on at the moment and what are my current interests.</p>
+
+            <h1 class="text-white light-mode:text-slate-800 italic text-4xl mt-8">What I'm doing right <span class="text-e6n-yellow">now</span></h1>
+            <p class="text-slate-400 light-mode:text-slate-800 text-sm pb-4">{ now.toDateString() }</p>
+
+            <p class="pb-3 text-white light-mode:text-slate-800 text-xl">Implementing search experience for <a href="https://kourses.com/" class="border-b border-e6n-blue hover:bg-e6n-blue" target="_blank">Kourses</a> using <a href="https://www.meilisearch.com/" class="border-b border-e6n-red hover:bg-e6n-red" target="_blank">Meilisearch</a>. Currently we are dogfooding<sup>1</sup> Kourses for <a href="https://university.optimizepress.com/login" class="border-b border-e6n-blue hover:bg-e6n-blue" target="_blank">OptimizePress University</a> but closed beta should be out soon as search is one of the last feature to be added for beta 1.</p>
+
+            <p class="text-slate-400 light-mode:text-slate-800 text-xl"><sup>1</sup> Dogfooding is a term used when you use a product you've built your self as a customer.</p>
+        </div>
+    </div>
+</MainLayout>

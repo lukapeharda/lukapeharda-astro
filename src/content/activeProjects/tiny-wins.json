@@ -1,0 +1,10 @@
+{
+    "id": "tiny-wins",
+    "title": "Tiny Wins",
+    "url": "https://tinywins.today/?utm_source=website&utm_medium=post&utm_campaign=luka-peharda-com",
+    "description": "<p><strong>Web app for tracking your habits and wins no matter how small.</strong></p><p>Track your wins, create a habit out of them and get inspired by other users and their wins!</p>",
+    "image": "/tinywins-1.png",
+    "technologies": ["reactjs", "recoil", "laravel", "sanctum", "tailwindcss"],
+    "color": "yellow",
+    "hoverColor": "red"
+}

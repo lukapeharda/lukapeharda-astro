@@ -1,0 +1,10 @@
+{
+    "id": "hotel-central-sb",
+    "title": "Hotel Central SB",
+    "url": "http://app.hotelcentralsb.hr/?utm_source=website&utm_medium=post&utm_campaign=luka-peharda-com",
+    "description": "<p><strong>PWA for the Hotel Central in Slavonski Brod, Croatia</strong></p><p>Book a room, make a check-in and use digital concierge directly in the app. Check events and sights around you.</p>",
+    "image": "/hcsb-pwa-app-2.png",
+    "technologies": ["reactjs", "redux", "pwa", "php", "laravel", "nova", "tailwindcss"],
+    "color": "blue",
+    "hoverColor": "red"
+}

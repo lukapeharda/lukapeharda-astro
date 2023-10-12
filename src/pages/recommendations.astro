@@ -1,0 +1,23 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+import Books from "../components/Books.jsx";
+import Podcasts from "../components/Podcasts.jsx";
+
+import { getCollection } from 'astro:content';
+
+const books = await getCollection('bookRecommendations');
+const podcasts = await getCollection('podcastRecommendations');
+---
+
+<MainLayout title="Podcast and book recommendations" description="List of podcasts and books that I recommend">
+    <div class="h-full w-full p-4 md:p-8 text-content bg-e6n-black light-mode:bg-white flex flex-wrap">
+        <div class="w-full md:w-1/2 md:pr-3">
+            <h1 class="text-white light-mode:text-gray-800 text-4xl italic mb-4">Book recommendations</h1>
+            <Books books={ books.sort((a, b) => a.data.recommendationYear - b.data.recommendationYear) } />
+        </div>
+        <div class="w-full md:w-1/2 md:pl-3">
+            <h1 class="text-white light-mode:text-gray-800 text-4xl italic mb-4">Podcast recommendations</h1>
+            <Podcasts podcasts={ podcasts.sort((a, b) => a.data.recommendationYear - b.data.recommendationYear) } />
+        </div>
+    </div>
+</MainLayout>

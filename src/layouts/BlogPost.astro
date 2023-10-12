@@ -1,0 +1,31 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+
+type Props = CollectionEntry<'article'>['data'];
+
+const { title, excerpt, date } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <BaseHead title={title + ' - ' + SITE_TITLE} description={ excerpt || SITE_DESCRIPTION } />
+    </head>
+    <body>
+        <div class="flex h-screen flex-col bg-e6n-black light-mode:bg-white">
+            <Header />
+            <main class="flex-grow bg-e6n-black light-mode:bg-white">
+                <article class="relative h-full w-full bg-e6n-black light-mode:bg-white">
+                    <div class="xl:w-1/2 md:w-2/3 p-4 md:p-8 text-content mb-24 md:mb-0">
+                        <slot />
+                    </div>
+                </article>
+            </main>
+            <Footer />
+        </div>
+    </body>
+</html>

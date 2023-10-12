@@ -1,0 +1,19 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import ArchivedProjects from '../../components/ArchivedProjects.jsx';
+
+import { getCollection } from 'astro:content';
+
+const archivedProjects = await getCollection('archivedProjects');
+---
+
+<MainLayout title="Past, on-going and failed projects" description="List of all past, on-going and failed projects">
+    <div class="w-full xl:w-1/2 md:w-2/3 p-4 md:p-8 text-content bg-e6n-black light-mode:bg-white">
+        <h1 class="text-white light-mode:text-gray-800 text-4xl italic mb-4">Past, <span class="text-e6n-red">failed</span> and on-going projects</h1>
+        <p class="pb-3 text-white light-mode:text-gray-800 text-xl">List of all my past and on-going projects with updated stats. Inspired by <a href="https://joshpigford.com/projects" class="border-b border-e6n-blue hover:bg-e6n-blue" target="_blank">https://joshpigford.com/projects</a>.</p>
+        <p class="text-white light-mode:text-gray-800 text-xl">I believe it is very important to show your failures and admit your mistakes. So here are few of mine :)</p>
+    </div>
+    <div class="w-full p-4 md:p-8 text-content bg-e6n-black light-mode:bg-white">
+        <ArchivedProjects projects={ archivedProjects }></ArchivedProjects>
+    </div>
+</MainLayout>

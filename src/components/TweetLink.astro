@@ -1,0 +1,11 @@
+---
+interface Props {
+	text: string;
+}
+
+const { text } = Astro.props;
+
+const encodedLink = encodeURI(text);
+---
+
+<a href={ "https://twitter.com/intent/tweet?text=" + encodedLink } class="border-b border-e6n-blue hover:bg-e6n-blue" target="_blank"><slot /></a>
