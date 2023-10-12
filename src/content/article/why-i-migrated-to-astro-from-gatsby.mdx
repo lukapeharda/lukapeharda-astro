@@ -1,0 +1,45 @@
+---
+title: "Why I Migrated to Astro from Gatsby"
+url: "/article/why-i-migrated-to-astro-from-gatsby"
+date: "2023-10-12"
+excerpt: "Read about why I decided to migrate my website to Astro. What I'm liking and what I'm not liking as much."
+---
+
+import ColorLink from '../../components/ColorLink.astro';
+import Divider from '../../components/Divider.astro';
+
+<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl"><em>TLDR;</em> Boredom. Also to learn something new.</p>
+
+<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">In last couple of months I've been migrating this website from Gatsby to Astro. Migration took me around 15h and that includes learning Astro from start.</p>
+
+<Divider></Divider>
+
+<h2 class="text-white light-mode:text-gray-800 text-2xl italic mb-4">What is Astro?</h2>
+
+<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">Their website says it is an all-in-one web framework for building fast, content-focused websites. And it is. Features that got me interested was <em>server-first API design</em>, <em>zero JS by default</em>, <em>edge-ready</em> and <em>UI-agnostic</em>. Read more about the framework and its key features <ColorLink color="red" href="https://docs.astro.build/en/getting-started/">here</ColorLink>.</p>
+
+<Divider></Divider>
+
+<h2 class="text-white light-mode:text-gray-800 text-2xl italic mb-4">Why did I do it?</h2>
+
+<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">I got tired of Gatsby and its weird content data model which rely on GraphQL. My projects, articles and recommendations were stored in JSON and I had to jump through static GraphQL queries to fetch data.</p>
+
+<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">And I wanted to learn something fresh and new. And I was a bit bored.</p>
+
+<Divider></Divider>
+
+<h2 class="text-white light-mode:text-gray-800 text-2xl italic mb-4">What am I liking best about Astro?</h2>
+
+<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">It is really fast. And JSON is a first-class citizen.</p>
+
+<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">Beside providing Astro components, you can use any other JS components - either from React, Vue or Svelte. This means that I was able to quickly use my existing ustom React components from Gatsby here.</p>
+
+<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">MDX support almost out of the box as well as easy syntax highlighting was a plus too.</p>
+
+<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">Writing article should be much quicker. Not sure if this has any real benefit as I'm currently at a rate of one article per year 🙈.</p>
+
+<Divider></Divider>
+
+<h2 class="text-white light-mode:text-gray-800 text-2xl italic mb-4">What am I disliking?</h2>
+
+<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">Using existing React components 🤪 Why? Because Astro components looks nicer and everything works out of the box - like experimental browser view transitions. For React components I need to do extra coding to get page /content transition to work.</p>
