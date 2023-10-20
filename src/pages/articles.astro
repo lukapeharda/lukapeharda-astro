@@ -10,5 +10,5 @@ const articles = (await getCollection('article')).sort(
 ---
 
 <MainLayout title="Articles" description="Articles written by Luka Peharda">
-    <BlogArticles articles={ articles } client:load></BlogArticles>
+    <BlogArticles articles={ articles } client:idle></BlogArticles>
 </MainLayout>
