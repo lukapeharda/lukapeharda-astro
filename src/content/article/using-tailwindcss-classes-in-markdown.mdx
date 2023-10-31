@@ -1,0 +1,83 @@
+---
+title: "Using Tailwind CSS classes in markdown"
+url: "/article/using-tailwindcss-classes-in-markdown/"
+date: "2023-10-31"
+excerpt: "In order to speed up article publishing I had to find a solution to use Tailwind CSS classes in markdown content. This article describes two different solutions."
+---
+
+import Divider from '../../components/Divider.astro';
+
+import H2 from '../../components/articles/H2.astro';
+import Paragraph from '../../components/articles/Paragraph.astro';
+import Emphasis from '../../components/articles/Emphasis.astro';
+import Link from '../../components/articles/Link.astro';
+export const components = {
+    h2: H2,
+    p: Paragraph,
+    hr: Divider,
+    em: Emphasis,
+    a: Link,
+};
+
+One of the biggest reasons why I moved my blog from Gatsby to Astro was its markdown integration and ease of creating new articles using markdown syntax.
+
+Not only markdown but [MDX](https://mdxjs.com/) - using JSX and component imports in markdown content.
+
+## Using Tailwind CSS typography plugin
+
+As my blog is built using Tailwind CSS, content for the blog articles were also using Tailwind's classes to style it. This means that instead of using regular
+```html
+<p>
+```
+tags I'm using
+```html
+<p class="pb-3 text-slate-400 text-xl">
+```
+to create a "simple" paragraph. As you can see this isn't really simple nor does it enable me to write articles fast.
+
+Not that the speed of converting my thoughts and ideas into HTML markup was my biggest problem.
+
+***
+
+Sensible person would use Tailwind's [typography plugin](https://tailwindcss.com/docs/typography-plugin) to style all content markup using CSS classes on the markdown content parent element. Their page even says that the plugin'S intended use is to *to add beautiful typographic defaults to any vanilla HTML you don’t control, like HTML rendered from Markdown*.
+
+How would the paragraph look like using Tailwind's `prose` classes?
+```html
+<article class="prose prose-p:pb-3 prose-p:text-slate-400 prose-p:text-xl">
+```
+You'd have to add modifiers to the parent element class attribute. And repeat those modifiers for all other "target" like `a`, `h1`, `h2`, `ul` and all others.
+
+And you'd have to reset some of the defaults that typography plugin brings to the table. It looks less and less as a sensible solution. Right?
+
+## Assigning Custom Components to HTML elements
+
+Fortunately smart folks from MDX were already thinking of scenarios like that.
+
+That is why you can import your custom component and then export a `components` object that maps the standard HTML to your custom component:
+
+```js
+import Paragraph from '../components/Paragraph.astro';
+export const components = {p: Paragraph}
+
+This will be styled custom paragraph.
+```
+
+`Paragraph.astro` component is pretty simple:
+
+```html
+<p class="pb-3 text-slate-400 text-xl">
+    <slot />
+</p>
+```
+
+`<slot />` is where the "child" content (paragraph's text) will go.
+
+***
+
+This whole article was written using standard markdown syntax with styling applied by overwritting the HTML with custom components. I must say that the speed of writing this article surprised even me. Whole article was written in VS Code without any need for custom HTML markup nor CSS nor messy copy/pasting from older articles.
+
+Now I'm off to find a good VS Code extension for Grammarly so I literaly don't have to use any other tool to publish an article.
+
+***
+
+To learn more, visit Astro's [Markdown Content](https://docs.astro.build/en/guides/markdown-content/#assigning-custom-components-to-html-elements) guide or [MDX Website](https://mdxjs.com/table-of-components/) for a full list of HTML elements that can be overwritten as custom components.
