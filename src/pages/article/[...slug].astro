@@ -1,6 +1,9 @@
 ---
 import { CollectionEntry, getCollection } from 'astro:content';
 import BlogPost from '../../layouts/BlogPost.astro';
+import ColorLink from '../../components/ColorLink.astro';
+import TweetLink from '../../components/TweetLink.astro';
+import Divider from '../../components/Divider.astro';
 
 export async function getStaticPaths() {
     const posts = await getCollection('article');
@@ -19,4 +22,8 @@ const { Content } = await post.render();
     <h1 class="text-white light-mode:text-gray-800 text-4xl italic mb-0">{ post.data.title }</h1>
     <div class="text-gray-500 light-mode:text-gray-800 text-xs mb-4">{ new Date(post.data.date).toDateString() }</div>
     <Content />
+    <Divider />
+    <p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">
+        If you like this article consider <TweetLink text={ `${post.data.title} on https://lukapeharda.com${post.data.url} by @lukapeharda` }>tweeting</TweetLink> or check out my other <ColorLink href="/articles" color="red">articles</ColorLink>.
+    </p>
 </BlogPost>
