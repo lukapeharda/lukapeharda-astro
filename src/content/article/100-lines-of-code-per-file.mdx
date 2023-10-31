@@ -6,21 +6,39 @@ excerpt: "It has gotten to my attention that one of the biggest dev companies in
 ---
 
 import Divider from '../../components/Divider.astro';
-import ColorLink from '../../components/ColorLink.astro';
-import TweetLink from '../../components/TweetLink.astro';
 
-<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">It has gotten to my attention that one of the biggest dev companies in the region has a pull-request requirement that checks whether each file committed is under 100 lines long.</p>
-<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">It seems like a pretty stupid requirement, right?</p>
-<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl"><em>Then I tried it.</em></p>
+import H2 from '../../components/articles/H2.astro';
+import Paragraph from '../../components/articles/Paragraph.astro';
+import Emphasis from '../../components/articles/Emphasis.astro';
+import Link from '../../components/articles/Link.astro';
+export const components = {
+    h2: H2,
+    p: Paragraph,
+    hr: Divider,
+    em: Emphasis,
+    a: Link,
+};
 
-<Divider></Divider>
 
-<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">I had a class that was 133 lines long and I want to see whether I can get it under 100. As the class was already "doing one thing" it didn't make sense to refactor it and split it into two files.</p>
-<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">First to go were the comments 😀 Method docblocks were replaced with proper type declarations and return types. To preserve the readability, variable and method names had to be changed to be self-explanatory although a bit longer. Conditionals were extracted into separate methods.</p>
-<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">Multiple simple <em>IFs</em> were combined into one, which did hurt readability a bit but it saved 5 lines 😀</p>
-<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">Somewhat duplicated code was extracted and parametrized which allowed me to reuse methods in several locations.</p>
-<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">And I got to 99 lines 🚀</p>
+It has gotten to my attention that one of the biggest dev companies in the region has a pull-request requirement that checks whether each file committed is under 100 lines long.
 
-<Divider></Divider>
+It seems like a pretty stupid requirement, right?
 
-<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">I was skeptical about this requirement when I started but now I see its benefits. It makes you think about your code a bit more and forces you to make it more readable while also removing clutter from your files. And as strange as this may sound, it was fun doing it 😆</p>
+*Then I tried it.*
+
+***
+
+
+I had a class that was 133 lines long and I want to see whether I can get it under 100. As the class was already "doing one thing" it didn't make sense to refactor it and split it into two files.
+
+First to go were the comments 😀 Method docblocks were replaced with proper type declarations and return types. To preserve the readability, variable and method names had to be changed to be self-explanatory although a bit longer. Conditionals were extracted into separate methods.
+
+Multiple simple *IFs* were combined into one, which did hurt readability a bit but it saved 5 lines 😀
+
+Somewhat duplicated code was extracted and parametrized which allowed me to reuse methods in several locations.
+
+And I got to 99 lines 🚀
+
+***
+
+I was skeptical about this requirement when I started but now I see its benefits. It makes you think about your code a bit more and forces you to make it more readable while also removing clutter from your files. And as strange as this may sound, it was fun doing it 😆
