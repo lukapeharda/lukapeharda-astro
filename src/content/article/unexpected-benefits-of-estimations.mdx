@@ -6,34 +6,49 @@ excerpt: "Did you know you can use the estimation to jump-start and beat procras
 ---
 
 import Divider from '../../components/Divider.astro';
-import ColorLink from '../../components/ColorLink.astro';
-import TweetLink from '../../components/TweetLink.astro';
 
-<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">I yet have to meet a developer that likes doing estimations. And don't get me started on sticking with them.</p>
-<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">I get that they are necessary for management to make plans but that does not mean I have to like them or enjoy doing them. No matter how hard I try my estimations are never correct.</p>
-<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl"><span class="italic text-slate-400 light-mode:text-slate-800">I've been using <ColorLink color="yellow" href="https://www.fool.com/the-ascent/small-business/project-management/articles/three-point-estimating/">the three-point estimation technique</ColorLink> lately.</span></p>
-<p class="text-slate-400 light-mode:text-slate-800 text-xl">Did you know you can use the estimation to jump-start and beat procrastination? No? Read on. You did? Well, why didn't you share it with me?</p>
+import H2 from '../../components/articles/H2.astro';
+import Paragraph from '../../components/articles/Paragraph.astro';
+import Emphasis from '../../components/articles/Emphasis.astro';
+import Link from '../../components/articles/Link.astro';
+export const components = {
+    h2: H2,
+    p: Paragraph,
+    hr: Divider,
+    em: Emphasis,
+    a: Link,
+};
 
-<h2 class="text-white light-mode:text-slate-800 text-2xl italic mt-8 mb-4">What is procrastination?</h2>
+I yet have to meet a developer that likes doing estimations. And don't get me started on sticking with them.
 
-<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl"><span class="italic">"<ColorLink color="blue" href="https://www.verywellmind.com/the-psychology-of-procrastination-2795944">Procrastination</ColorLink> is the act of delaying or putting off tasks until the last minute, or past their deadline."</span></p>
-<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">Why? I'll leave that up to you as each of us have a large number of different reasons for it.</p>
-<p class="text-slate-400 light-mode:text-slate-800 text-xl">In some cases, reasons for the procrastination can be because we don't know how to do something or even what needs to be done. Or we are intimidated by the size of the task in front of us. And this is where estimation kicks in!</p>
+I get that they are necessary for management to make plans but that does not mean I have to like them or enjoy doing them. No matter how hard I try my estimations are never correct.
 
-<h2 class="text-white light-mode:text-slate-800 text-2xl italic mt-8 mb-4">How estimation can help?</h2>
+*I've been using [the three-point estimation technique](https://www.fool.com/the-ascent/small-business/project-management/articles/three-point-estimating/) lately.*
 
-<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">Well, when doing an estimation you'll have to get all information on what it is that you are building. You'll have to fill all missing gaps and deal with all ambiguous requirements.</p>
-<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">You'll split a large task into smaller manageable pieces. <span class="italic text-slate-400 light-mode:text-slate-800">And you'll be able to procrastinate over a large number of smaller tasks.</span></p>
-<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">By doing that, the task will be manageable and our motivation will slightly improve.</p>
-<p class="text-slate-400 light-mode:text-slate-800 text-xl"></p>
+Did you know you can use the estimation to jump-start and beat procrastination? No? Read on. You did? Well, why didn't you share it with me?
 
-<h2 class="text-white light-mode:text-slate-800 text-2xl italic mt-8 mb-4">Additional benefits</h2>
+## What is procrastination?
 
-<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">Usually, the best cure for procrastination is to just start working. Doing as small a chunk of work as possible. Guess what? By doing the estimation you've done exactly that! You've started working on your task. And now nobody can stop you.</p>
-<p class="text-slate-400 light-mode:text-slate-800 text-xl">Not only that, but by providing the estimation number you'll be "going public" with it and now a much larger audience could "hold you accountable".</p>
+*"[Procrastination](https://www.verywellmind.com/the-psychology-of-procrastination-2795944) is the act of delaying or putting off tasks until the last minute, or past their deadline."*
 
-<Divider></Divider>
+Why? I'll leave that up to you as each of us have a large number of different reasons for it.
 
-<p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl"><span class="text-slate-400 light-mode:text-slate-800">This article is a part of my personal pledge to write at least one article per month for a whole year. As you can see, I've written this article on the last day of May which means that I'm struggling with procrastination as well so if you know any good tips please let me know!</span></p>
+In some cases, reasons for the procrastination can be because we don't know how to do something or even what needs to be done. Or we are intimidated by the size of the task in front of us. And this is where estimation kicks in!
 
+## How estimation can help?
 
+Well, when doing an estimation you'll have to get all information on what it is that you are building. You'll have to fill all missing gaps and deal with all ambiguous requirements.
+
+You'll split a large task into smaller manageable pieces. *And you'll be able to procrastinate over a large number of smaller tasks.*
+
+By doing that, the task will be manageable and our motivation will slightly improve.
+
+## Additional benefits
+
+Usually, the best cure for procrastination is to just start working. Doing as small a chunk of work as possible. Guess what? By doing the estimation you've done exactly that! You've started working on your task. And now nobody can stop you.
+
+Not only that, but by providing the estimation number you'll be "going public" with it and now a much larger audience could "hold you accountable".
+
+***
+
+*This article is a part of my personal pledge to write at least one article per month for a whole year. As you can see, I've written this article on the last day of May which means that I'm struggling with procrastination as well so if you know any good tips please let me know!*
