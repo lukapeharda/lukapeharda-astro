@@ -1,7 +1,7 @@
 ---
 import MainLayout from '../layouts/MainLayout.astro';
 
-const now = new Date('2023-10-12');
+const now = new Date('2024-01-09');
 ---
 
 <MainLayout title="What I'm doing right now" description="This page tells you what I'm working on at the moment and what are my current interests">
@@ -13,9 +13,7 @@ const now = new Date('2023-10-12');
             <h1 class="text-white light-mode:text-slate-800 italic text-4xl mt-8">What I'm doing right <span class="text-e6n-yellow">now</span></h1>
             <p class="text-slate-400 light-mode:text-slate-800 text-sm pb-4">{ now.toDateString() }</p>
 
-            <p class="pb-3 text-white light-mode:text-slate-800 text-xl">I'm polishing UI for <a href="https://kourses.com/" class="border-b border-e6n-blue hover:bg-e6n-blue" target="_blank">Kourses</a> and fixing issues found by our testing team. Slowly but surely the product will be available for our beta testers. Seems both terrifying and exhilarating to be so near the public release after 6 years from first commit.</p>
-
-            <p class="pb-3 text-white light-mode:text-slate-800 text-xl">I've converted my personal page (this one) to use <a href="https://astro.build/" class="border-b border-e6n-red hover:bg-e6n-red" target="_blank">Astro</a> instead of GatsbyJS. Reasons for doing so you can find in the accompanying <a href="/article/why-i-migrated-to-astro-from-gatsby/" class="border-b border-e6n-yellow hover:bg-e6n-yellow">article</a>.</p>
+            <p class="pb-3 text-white light-mode:text-slate-800 text-xl">I am currently working on integrating in-app notifications for <a href="https://kourses.com/" class="border-b border-e6n-blue hover:bg-e6n-blue" target="_blank">Kourses</a>, ensuring that both admins and members receive timely alerts regarding new content updates and mentions. This feature aims to enhance the overall user experience by keeping users informed about important events within the platform.</p>
         </div>
     </div>
 </MainLayout>
