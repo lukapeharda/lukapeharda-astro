@@ -1,7 +1,7 @@
 ---
 import MainLayout from '../layouts/MainLayout.astro';
 
-const now = new Date('2024-01-09');
+const now = new Date('2024-02-14');
 ---
 
 <MainLayout title="What I'm doing right now" description="This page tells you what I'm working on at the moment and what are my current interests">
@@ -13,7 +13,9 @@ const now = new Date('2024-01-09');
             <h1 class="text-white light-mode:text-slate-800 italic text-4xl mt-8">What I'm doing right <span class="text-e6n-yellow">now</span></h1>
             <p class="text-slate-400 light-mode:text-slate-800 text-sm pb-4">{ now.toDateString() }</p>
 
-            <p class="pb-3 text-white light-mode:text-slate-800 text-xl">I am currently working on integrating in-app notifications for <a href="https://kourses.com/" class="border-b border-e6n-blue hover:bg-e6n-blue" target="_blank">Kourses</a>, ensuring that both admins and members receive timely alerts regarding new content updates and mentions. This feature aims to enhance the overall user experience by keeping users informed about important events within the platform.</p>
+            <p class="pb-3 text-white light-mode:text-slate-800 text-xl">After adding in-app notifications for <a href="https://kourses.com/" class="border-b border-e6n-blue hover:bg-e6n-blue" target="_blank">Kourses</a>, we've started to work on emailing those new notifications to members in order to drive engagment with the platform and to notify members when somebody replied to their comment or commented on the content they created.</p>
+            <p class="pb-3 text-white light-mode:text-slate-800 text-xl">When dealing with emails, there is a fine line of how many emails sent and at which frequency is just enough. And there is always a matter of cost and server utilization to think about.</p>
+            <p class="pb-3 text-white light-mode:text-slate-800 text-xl">Plus, as these emails are not strictly transactional, unsubscribe flows will be developed in order for each member to tailor their own needs and experince.</p>
         </div>
     </div>
 </MainLayout>
