@@ -1,0 +1,122 @@
+---
+title: "Use EXISTS instead of COUNT > 0 when checking if records exist"
+url: "/article/use-exists-instead-of-count/"
+date: "2024-02-14"
+excerpt: "When checking for the existence of SQL records, it's more efficient to use the exists method instead of count. The exists method breaks the loop as soon as it finds the first record, making it more performant."
+---
+
+import Divider from '../../components/Divider.astro';
+
+import H2 from '../../components/articles/H2.astro';
+import Paragraph from '../../components/articles/Paragraph.astro';
+import Emphasis from '../../components/articles/Emphasis.astro';
+import Link from '../../components/articles/Link.astro';
+import Blockquote from '../../components/articles/Blockquote.astro';
+export const components = {
+    h2: H2,
+    p: Paragraph,
+    hr: Divider,
+    em: Emphasis,
+    a: Link,
+    blockquote: Blockquote
+};
+
+TL;DR Use `EXISTS` when querying if SQL records exists instead of using `COUNT`. `EXISTS` is much more efficient and breaks out of the loop when first record is found.
+
+## Using COUNT
+
+Until recently, when I had to check if a DB record that satisfies some conditions exists, I’ve used a `COUNT` and then check if returned result is greater than `0`.
+
+Plain SQL query:
+
+```sql
+SELECT COUNT(*)
+FROM `post_likes`
+WHERE `member_id` = 1
+AND `post_id` = 1
+```
+
+>*MySQL has `COUNT(*)` optimised and it is faster and more efficient than using `COUNT(id)` for example.*
+
+Laravel Eloquent query (using `postLikes` relationship):
+
+```php
+// Did member like a post
+$member->postLikes()->count() > 0;
+```
+
+>*Notice the brackets after `postLikes()` relationship name. This means we are using the relationship to generate query on the related table and setting up foreign key for us. If we used `$member->postLikes->count()` , without the brackets, we would fetch all related records and then do a count afterwards. This would result in a much costlier DB query, and more memory used as all those records needs to saved to memory.*
+
+This would “force” a DB to count through all of the records that satisfies these conditions. And if your table is large enough it could take some time. Granted, probably in milliseconds but still it would do unnecessary work as it does not know that you are just interested in “existence” of the record and not the exact count.
+
+Of course, if you indexed the table “properly” and use a composite index on `member_id` and `post_id` columns result would be pretty fast in this scenario but in some others it still may be optimised.
+
+## Using `EXISTS` subquery
+
+Better way would be to use an `EXISTS` subquery. This is available in MySQL from version 5.7 so there is no reason not to use it.
+
+You can check MySQL docs on EXISTS [here](https://dev.mysql.com/doc/refman/8.0/en/exists-and-not-exists-subqueries.html). There is also NOT EXISTS subquery.
+
+EXISTS works by encapsulating a query in SELECT subquery:
+
+```php
+SELECT EXISTS(
+	SELECT *
+	FROM `post_likes`
+	WHERE `member_id` = 1
+	AND `post_id` = 1
+)
+```
+
+>*Doesn’t matter if your SELECT fetches all columns (`*`) or plain `1` , SELECT will be discarded in EXISTS query.*
+
+This query will return `true` if subquery has at least one record or `false` if there are no records that satisfies your conditions. MySQL will break out of the “loop” when it finds the first record and this is what makes it more performant than the COUNT.
+
+In Laravel you can use `exists` method on the query builder:
+
+```php
+// Did member like a post
+$member->postLikes()->exists();
+```
+
+Eloquent will encapsulate the query in the EXISTS subquery.
+
+Eloquent also provides `whereExists` , `whereNotExists` , `doesntExist`, `withExists` and several more to allow you to build a query that you need.
+
+## Proper example of using `EXISTS`
+
+I’ve been using this to check existence of all kinds of records and relationships. Like permissions, likes and even as a nested subquery.
+
+For example, when fetching a list of posts to display on the page, I want to know if member did like a post in order to show a proper UI icon. This could lead to a N+1 situation where for each post we’d have to do a separate SQL query to check if record exits.
+
+Or we can use EXISTS subquery:
+
+```php
+SELECT `id`, `title`, `content`, exists(
+	SELECT *
+	FROM `post_likes`
+	WHERE `posts`.`id` = `post_likes`.`post_id`
+	AND `member_id` = 1
+) AND `is_liked`
+FROM `posts`
+```
+
+This will be done in a single optimised SQL query and provide information if member liked a post in a generated `is_liked` column. To be precise, MySQL will do N+1 subqueries to check for existence but this will be optimised and done internally.
+
+In Laravel you’d use `withExists` to do the same thing:
+
+```php
+$posts = Post::query()
+	->select(['id', 'title', 'content'])
+	->withExists([
+        'postLikes as is_liked' => function ($query) {
+		    $query->where('member_id', $member->id);
+	    }
+    ]);
+```
+
+`is_liked` will be added as an attribute on each `$post` model.
+
+---
+
+This optimisation may not seem as important and it may look like a “micro” improvement. But if your tables have millions of records then you already know that every millisecond counts.
