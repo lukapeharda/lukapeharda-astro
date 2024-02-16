@@ -4,17 +4,34 @@ import BlogPost from '../../layouts/BlogPost.astro';
 import ColorLink from '../../components/ColorLink.astro';
 import TweetLink from '../../components/TweetLink.astro';
 import Divider from '../../components/Divider.astro';
+import PrevNext from '../../components/PrevNext.astro';
+
+
 
 export async function getStaticPaths() {
     const posts = await getCollection('article');
-    return posts.map((post) => ({
+    const numberOfPosts = posts.length;
+
+    const sortByDate = (a, b) => {
+        return new Date(b.data.date) - new Date(a.data.date);
+    }
+
+    return posts.sort(sortByDate).map((post, i) => ({
         params: { slug: post.slug },
-        props: post,
+        props: {
+            post,
+            prevPost: i + 1 === numberOfPosts
+                ? null
+                : posts[i + 1],
+            nextPost: i === 0
+                ? null
+                : posts[i - 1],
+        },
     }));
 }
 type Props = CollectionEntry<'article'>;
 
-const post = Astro.props;
+const { post, prevPost, nextPost } = Astro.props;
 const { Content } = await post.render();
 ---
 
@@ -26,4 +43,5 @@ const { Content } = await post.render();
     <p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">
         If you like this article consider <TweetLink text={ `${post.data.title} on https://lukapeharda.com${post.data.url} by @lukapeharda` }>tweeting</TweetLink> or check out my other <ColorLink href="/articles/" color="red">articles</ColorLink>.
     </p>
+    <PrevNext prevPost={prevPost} nextPost={nextPost} />
 </BlogPost>
