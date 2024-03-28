@@ -1,0 +1,72 @@
+---
+title: "Code refactoring: what is it and why should you do it"
+url: "/article/code-refactoring-what-is-it-and-why-should-you-do-it/"
+date: "2024-03-28"
+excerpt: "Refactoring is like a makeover for your code, keeping it tidy and efficient without changing what it does. It's essential for code hygiene, making it easier to read, maintain, and even boosting performance. Think of it as paying off technical debts and adding a fresh coat of paint to your code's home."
+---
+
+import Divider from '../../components/Divider.astro';
+
+import H2 from '../../components/articles/H2.astro';
+import H3 from '../../components/articles/H3.astro';
+import Paragraph from '../../components/articles/Paragraph.astro';
+import Emphasis from '../../components/articles/Emphasis.astro';
+import Strong from '../../components/articles/Strong.astro';
+import Link from '../../components/articles/Link.astro';
+import Blockquote from '../../components/articles/Blockquote.astro';
+export const components = {
+    h2: H2,
+    h3: H3,
+    p: Paragraph,
+    hr: Divider,
+    em: Emphasis,
+    a: Link,
+    blockquote: Blockquote,
+    strong: Strong
+};
+
+There is a lot of talk and mention of refactoring in developer communities. But what is it exactly?
+
+Some use refactoring as an **insult** - meaning your code is bad and it needs refactoring. Others use it as an **excuse** - meaning my estimations were wrong because I needed to refactor legacy code or when regression bugs happen because they were “refactoring” code.
+
+## What is refactoring
+
+Refactoring is the art of restructuring existing code without changing its external behavior. And this distinction without changing is really important.
+
+Refactoring shouldn't be done while you are adding new features to the code. First, refactor old code and then proceed with adding a new feature.
+
+[Martin Fowler](https://refactoring.com/) says that refactoring is a "series of small behavior-preserving transformations". And if he says so then who are you (or me) to question that 🫣
+
+He continues that "each transformation does little, but a sequence of these transformations can produce a significant restructuring."" By making small changes it is less likely you'll break things.
+
+Refactoring should not be a separate task that we'd add once in a while to our TO DO list. It should be a part of day-to-day programming.
+
+## Why should you refactor your code?
+
+You should consider refactoring as a part of your code hygiene - similar to washing your teeth or washing your hands. You don't question why - you just do it.
+
+### Enhance readability and maintainability
+
+Easier to read code is easier to fix. Both by you and your colleagues. You know, code is read more than it's written so it is important to be easy on the eyes.
+The best way to learn the value of simple code is to be the person who has to pick it up again several months (or years) after it was written. Preferably in an emergency where you have to make and deploy a change very quickly, and also be confident that you're not going to take the system down.
+
+### Improve extensibility and maintainability
+
+Well-factored code is like Lego blocks. Easy to add a new feature to it, or to remove it if you don't need it anymore.
+
+### Increase performance
+
+Sometimes, by simplifying code, you inadvertently or intentionally fix an issue which improves performance.
+
+### Reduce technical debt
+
+Technical debt refers to accumulated code issues that make future development harder.
+
+Refactoring helps you pay down this debt by fixing issues like duplicate code, unused variables, and poor naming conventions.
+
+**However, refactoring shouldn't be done for its own sake.**
+Always have a clear goal in mind, such as improving readability, fixing a bug, or adding a new feature.
+
+---
+
+*I'm giving a talk at the [Weblica conference](https://weblica.hr/en/) about code refactoring so if you are interested in learning more, do come by. This will be my first talk at a conference (I'm not counting meetup talks) and I hope it will be both informative and amusing.*
