@@ -36,7 +36,7 @@ const { Content } = await post.render();
 ---
 
 <BlogPost {...post.data}>
-    <h1 class="text-white light-mode:text-gray-800 text-4xl italic mb-0">{ post.data.title }</h1>
+    <h1 class="text-white light-mode:text-gray-800 text-4xl italic text-balance mb-0">{ post.data.title }</h1>
     <div class="text-gray-500 light-mode:text-gray-800 text-xs mb-4">{ new Date(post.data.date).toDateString() }</div>
     <Content />
     <Divider />

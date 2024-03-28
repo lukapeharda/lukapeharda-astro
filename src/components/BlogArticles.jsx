@@ -46,7 +46,7 @@ function BlogArticles({ articles }) {
             <div className="flex flex-wrap -mx-4 mb-12 pb-8">
                 { items.map((article, index) => (
                     <div className="w-full md:w-1/2 lg:w-1/3 py-2 px-4" key={ article.id }>
-                        <h3>
+                        <h3 class="text-balance">
                             <ArticleLink className={ `text-white light-mode:text-slate-800 p-1 text-lg border-b border-e6n-${colors[index % 4]} hover:bg-e6n-${colors[index % 4]}` } href={ article.data.url } title={ article.data.title.replace('&nbsp;', '') } dangerouslySetInnerHTML={{ __html: article.data.title }}></ArticleLink>
                         </h3>
                         <div className="text-slate-400 light-mode:text-slate-800 text-xs mt-2">{ new Date(article.data.date).toDateString() }</div>
