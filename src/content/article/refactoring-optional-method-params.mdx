@@ -33,7 +33,7 @@ class PageRepository
             throw new Exception("Page $pageId not found.");
         }
 
-        return $page
+        return $page;
     }
     ...
 }
@@ -95,7 +95,7 @@ class PageRepository
 
     public function findAndPrerender($pageId)
     {
-        $page = $this->find($pageId, $prerender);
+        $page = $this->find($pageId, true);
 
         if ($page === null) {
             throw new Exception("Page $pageId not found.");
