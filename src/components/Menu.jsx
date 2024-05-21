@@ -49,9 +49,14 @@ function Menu({currentPathName}) {
                         className={`${ isActive('/articles/') ? 'border-b-2' : 'border-b' } block p-2 md:inline-block mt-4 md:mt-0 mx-3 no-underline text-slate-400 border-e6n-green hover:bg-e6n-green hover:text-white light-mode:text-slate-800`}
                     >articles</a>
                     <a
+                        href="/talks/"
+                        title="Talks"
+                        className={`${ isActive('/talks/') ? 'border-b-2' : 'border-b' } block p-2 md:inline-block mt-4 md:mt-0 mx-3 no-underline text-slate-400 border-e6n-red hover:bg-e6n-red hover:text-white light-mode:text-slate-800`}
+                    >talks</a>
+                    <a
                         href="/about/"
                         title="About"
-                        className={`${ isActive('/about/') ? 'border-b-2' : 'border-b' } block p-2 md:inline-block mt-4 md:mt-0 mx-3 no-underline text-slate-400 border-e6n-red hover:bg-e6n-red hover:text-white light-mode:text-slate-800`}
+                        className={`${ isActive('/about/') ? 'border-b-2' : 'border-b' } block p-2 md:inline-block mt-4 md:mt-0 mx-3 no-underline text-slate-400 border-e6n-blue hover:bg-e6n-blue hover:text-white light-mode:text-slate-800`}
                     >about</a>
                 </nav>
             </div>

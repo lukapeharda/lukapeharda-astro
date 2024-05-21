@@ -1,0 +1,16 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import TalkList from "../components/TalkList.jsx";
+
+import { getCollection } from 'astro:content';
+
+const talks = await getCollection('talks');
+
+---
+
+<MainLayout title="Talks">
+    <div class="h-full w-full xl:w-1/2 md:w-2/3 p-4 md:p-8 text-content bg-e6n-black light-mode:bg-white">
+        <h1 class="text-white light-mode:text-gray-800 text-4xl italic mb-4">Talks</h1>
+        <TalkList talks={ talks.sort((a, b) => a.data.date - b.data.date) } />
+    </div>
+</MainLayout>
