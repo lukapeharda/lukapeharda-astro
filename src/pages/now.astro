@@ -1,7 +1,8 @@
 ---
 import MainLayout from '../layouts/MainLayout.astro';
+import Divider from '../components/Divider.astro';
 
-const now = new Date('2024-02-14');
+const now = new Date('2024-05-21');
 ---
 
 <MainLayout title="What I'm doing right now" description="This page tells you what I'm working on at the moment and what are my current interests">
@@ -13,9 +14,14 @@ const now = new Date('2024-02-14');
             <h1 class="text-white light-mode:text-slate-800 italic text-4xl mt-8">What I'm doing right <span class="text-e6n-yellow">now</span></h1>
             <p class="text-slate-400 light-mode:text-slate-800 text-sm pb-4">{ now.toDateString() }</p>
 
-            <p class="pb-3 text-white light-mode:text-slate-800 text-xl">After adding in-app notifications for <a href="https://kourses.com/" class="border-b border-e6n-blue hover:bg-e6n-blue" target="_blank">Kourses</a>, we've started to work on emailing those new notifications to members in order to drive engagment with the platform and to notify members when somebody replied to their comment or commented on the content they created.</p>
-            <p class="pb-3 text-white light-mode:text-slate-800 text-xl">When dealing with emails, there is a fine line of how many emails sent and at which frequency is just enough. And there is always a matter of cost and server utilization to think about.</p>
-            <p class="pb-3 text-white light-mode:text-slate-800 text-xl">Plus, as these emails are not strictly transactional, unsubscribe flows will be developed in order for each member to tailor their own needs and experince.</p>
+            <p class="pb-3 text-white light-mode:text-slate-800 text-xl"><a href="https://kourses.com/" class="border-b border-e6n-blue hover:bg-e6n-blue" target="_blank">Kourses</a>, a SaaS that I've been working on for the last five years, is in a private beta and has a first paying customer! 🎉</p>
+            <p class="pb-3 text-white light-mode:text-slate-800 text-xl">We are still missing a lot of features but we are adding new ones almost daily.</p>
+            <p class="pb-3 text-white light-mode:text-slate-800 text-xl">Currently, I'm re-enabling payments using Stripe and updating the code to fit with the newest Stripe recommendations and flows in order to support more payment methods (like wallets).</p>
+
+            <Divider />
+
+            <p class="pb-3 text-white light-mode:text-slate-800 text-xl">On a personal side of things, I've recently gave my first talk at <a href="https://weblica.hr/en/" class="border-b border-e6n-green hover:bg-e6n-green" target="_blank">tech conference</a> titled <a href="/talks/refactoring-weblica-2024/index.html" class="border-b border-e6n-red hover:bg-e6n-red" target="_blank">Refactoring: The Art and Craft of Code improvement</a>.</p>
+            <p class="pb-3 text-white light-mode:text-slate-800 text-xl">It was well received and I've enjoyed doing it.</p>
         </div>
     </div>
 </MainLayout>
