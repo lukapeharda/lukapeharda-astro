@@ -1,0 +1,1339 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>The Art and Craft of Code Improvement by Luka Peharda</title>
+
+		<link rel="stylesheet" href="dist/reset.css">
+		<link rel="stylesheet" href="dist/reveal.css">
+		<link rel="stylesheet" href="dist/theme/weblica.css">
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="plugin/highlight/enfinita.css">
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<h1>Refactoring: <small>The Art and Craft of Code Improvement</small></h1>
+					<hr class="divider--red" />
+					<p>Luka Peharda</p>
+					<aside class="notes">
+						As this is my first conference talk, I had a drink to calm my nerves.
+						And as we are sponsoring beers, I had a beer.
+						Now I am calm and ready to talk about refactoring but I have to pee and am nervous again. So, I'll be more wiser next time and have a shot instead.
+					</aside>
+				</section>
+				<section>
+					<h1>What</h1>
+
+					<aside class="notes">
+						Maybe it is better first to start with what it is not
+					</aside>
+				</section>
+				<!-- <section>
+					<img src="dist/media/refactoring-meme-2.webp" />
+					<aside class="notes">
+						Maybe it is better first to start with what it is not
+					</aside>
+				</section> -->
+				<section>
+					<h1>What it is not</h1>
+					<hr class="divider--yellow" />
+				</section>
+				<section data-auto-animate>
+					<h2 class="group-title group-title--yellow">What it is not</h2>
+					<p>Insult</p>
+					<!-- <img class="fragment" src="dist/media/refactoring-meme-5.jpg" /> -->
+
+					<aside class="notes">
+						<p>Some use refactoring as insult -  your code is bad it needs refactoring</p>
+						<p>Or if I'd wrote that it would be much better</p>
+					</aside>
+				</section>
+				<section data-auto-animate>
+					<h2 class="group-title group-title--yellow">What it is not</h2>
+					<p>Excuse</p>
+
+					<aside class="notes">
+						<p>Some as excuse</p>
+						<ul>
+							<li>my estimations were off because I needed to refactor a lot of code</li>
+							<li>or regression bugs happened due to refactoring</li>
+						</ul>
+					</aside>
+				</section>
+
+				<section>
+					<h1>What is Refactoring?</h1>
+					<hr class="divider--green" />
+				</section>
+
+				<section data-auto-animate>
+					<h2 class="group-title group-title--green">What is Refactoring?</h2>
+					<p>The art of restructuring existing computer code <strong>without changing</strong> its external behavior</p>
+				</section>
+				<section data-auto-animate>
+					<h2 class="group-title group-title--green">What is Refactoring?</h2>
+					<p>It is a code makeover, but without the need to hire Mirjana Mikulec</p>
+				</section>
+				<section data-auto-animate>
+					<h2 class="group-title group-title--green">What is Refactoring?</h2>
+					<p>"Refactoring is a series of small behavior preserving transformations. Each transformation does little, but a sequence of these transformations can produce a significant restructuring."</p>
+					<p style="text-align: right;"><strong>Martin Fowler</strong></p>
+
+					<aside class="notes">
+						<p>Since each refactoring is small, it's less likely to go wrong. The system is kept fully working after each refactoring, reducing the chances that a system can get seriously broken during the restructuring.</p>
+						<p>Refactoring assumes your code is coverered by tests so I'm not going to stress importance of it.</p>
+					</aside>
+				</section>
+
+				<section>
+					<h1>Why should you refactor your code?</h1>
+					<hr class="divider--red" />
+				</section>
+				<section data-auto-animate>
+					<h2 class="group-title">Why should you refactor your code?</h2>
+					<p>Enhance readability</p>
+
+					<aside class="notes">
+						<p>Easier to read code is easier to fix.</p>
+						<p>Both by you and your colleagues.</p>
+						<p>Code is read more than it's written.</p>
+					</aside>
+				</section>
+				<section data-auto-animate>
+					<h2 class="group-title">Why should you refactor your code?</h2>
+					<p>Enhance maintainability </p>
+
+					<aside class="notes">
+						<p>The best way to learn the value of simple code is to be the person who has to pick it up again several months (or years) after it was written.</p>
+						<p>Preferably in an emergency where you have to make and deploy a change very quickly, and also be confident that you're not going to take the system down.</p>
+					</aside>
+				</section>
+				<section data-auto-animate>
+					<h2 class="group-title">Why should you refactor your code?</h2>
+					<p>Improve extensibility</p>
+
+					<aside class="notes">
+						<p>Well-factored code is like Lego blocks</p>
+						<p>In the clean code the chance of introducing a bug are lesser than in the messy one</p>
+					</aside>
+				</section>
+				<section data-auto-animate>
+					<h2 class="group-title">Why should you refactor your code?</h2>
+					<p>Increase understanding of unfamiliar code</p>
+
+					<aside class="notes">
+						<p>When you have to understand what a code does you can change the unreadable code to better fit your mental model and reflect your understanding.</p>
+						<p>Think of it as washing the windows to see out more clearly</p>
+					</aside>
+				</section>
+				<section data-auto-animate>
+					<h2 class="group-title">Why should you refactor your code?</h2>
+					<p>Increase performance</p>
+
+					<aside class="notes">
+						<p>Sometimes, by simplifying code, you inadvertently or advertently fix an issue which improves performance</p>
+					</aside>
+				</section>
+				<section data-auto-animate>
+					<h2 class="group-title">Why should you refactor your code?</h2>
+					<p>Reduce technical debt</p>
+
+					<aside class="notes">
+						<p>Technical debt refers to accumulated code issues that make future development harder. Refactoring helps you pay down this debt by fixing issues like duplicate code, unused variables, and poor naming conventions</p>
+					</aside>
+				</section>
+				<section data-auto-animate>
+					<h2 class="group-title">Why should you refactor your code?</h2>
+					<p>1 + 1 = 3</p>
+
+					<aside class="notes">
+						<p>Refactoring code has a cumulative effect. Sum of small changes usually has a radical effect.</p>
+					</aside>
+				</section>
+
+				<!-- <section>
+					<h1>However</h1>
+
+					<p>Refactoring shouldn't be done for its own sake</p>
+
+					<aside class="notes">
+						<p>Always have a clear goal in mind, such as improving readability, fixing a bug, or adding a new feature</p>
+					</aside>
+				</section> -->
+
+				<section>
+					<h1>Let's start</h1>
+					<p>It's a warm summer evening in ancient Greece…</p>
+
+					<aside class="notes">
+						<p>Instead of starting with history let's start with a basic example to get you started.</p>
+						<p>You know when someone give a talk about framework (like Laravel for example) and then first start with a history of PHP. I don't like it. I'm not going to do it.</p>
+						<p>I'll start us up with an example just so you can get a feel for it.</p>
+					</aside>
+				</section>
+				<section>
+					<p>Course / Lesson / Video & Comments</p>
+
+					<aside class="notes">
+						<p>Our simple code example consist of a Course that has multiple Lessons. Lesson can have one Video (or none). And multiple Comments.</p>
+					</aside>
+				</section>
+
+				<section>
+					<pre><code data-line-numbers="5-32" class="language-php">class Course
+{
+	protected array $lessons;
+
+	public function statement(): string
+	{
+		$count = count($this->lessons);
+		$duration = 0;
+		$commentsCount = 0;
+
+		// Loop through lessons and calculate duration and comments count
+		foreach ($this->lessons as $lesson) {
+			if ($lesson->video !== null) {
+				$duration += floor($lesson->video->duration / 60);
+			} else {
+				$duration += floor(
+					str_word_count(
+						strip_tags($lesson->text)
+						) / 200 * 60
+					);
+			}
+
+			$commentsCount += count($lesson->comments);
+		}
+
+		return sprintf(
+			'This course has %d lessons with %d comments and will take %d minutes to complete.',
+			$count,
+			$commentsCount,
+			$duration
+		);
+	}
+}
+					</code></pre>
+
+					<aside class="notes">
+						<p>First thing that comes to mind is that the "statement" method is too long. Rule of thumb is usually 10 lines.</p>
+						<p>Good candidates for refactoring are conditionals and loops so lets start there.</p>
+					</aside>
+				</section>
+
+				<section>
+					<pre><code data-line-numbers="1-19|21-32" class="language-php">public function statement(): string
+{
+	$count = count($this->lessons);
+	$duration = 0;
+	$commentsCount = 0;
+
+	// Loop through lessons and calculate duration and comments count
+	foreach ($this->lessons as $lesson) {
+		$duration += $this->getLessonDuration($lesson);
+		$commentsCount += count($lesson->comments);
+	}
+
+	return sprintf(
+		'This course has %d lessons with %d comments and will take %d minutes to complete.',
+		$count,
+		$commentsCount,
+		$duration
+	);
+}
+
+protected function getLessonDuration(Lesson $lesson): int
+{
+	if ($lesson->video !== null) {
+		return floor($lesson->video->duration / 60);
+	} else {
+		return floor(
+			str_word_count(
+				strip_tags($lesson->text)
+			) / 200 * 60
+		);
+	}
+}
+					</code></pre>
+
+					<aside class="notes">
+						<p>Lets extract conditional into its own method</p>
+						<p>$lesson should go in as param and duration will be returned from it.</p>
+						<p>Now that we have extracted it, and named it with "Lesson" prefix, it is obvious its place is not in the Course class.</p>
+					</aside>
+				</section>
+
+				<section>
+					<pre><code data-line-numbers="7-18|20-23" class="language-php">class Lesson
+{
+	public ?Video $video = null;
+	public ?string $text = null;
+	public array $comments;
+
+	public function getDuration(): int
+	{
+		if ($this->video !== null) {
+			return floor($this->video->duration / 60);
+		} else {
+			return floor(
+				str_word_count(
+					strip_tags($this->text)
+				) / 200 * 60
+			);
+		}
+	}
+
+	public function getCommentsCount(): int
+	{
+		return count($this->comments);
+	}
+}
+					</code></pre>
+
+					<aside class="notes">
+						<p>Lets move the duration method into a lesson class</p>
+						<p>And lets do the same for comments count just so it looks nicer</p>
+				</section>
+
+				<section>
+					<pre><code data-line-numbers="" class="language-php">public function statement(): string
+{
+	$count = count($this->lessons);
+	$duration = $commentsCount = 0;
+
+	// Loop through lessons and calculate duration and comments count
+	foreach ($this->lessons as $lesson) {
+		$duration += $lesson->getDuration();
+		$commentsCount += $lesson->getCommentsCount();
+	}
+
+	return sprintf(
+		'This course has %d lessons with %d comments and will take %d minutes to complete.',
+		$count,
+		$commentsCount,
+		$duration
+	);
+}
+					</code></pre>
+					<aside class="notes">
+						<p>"statement" method is now shorter and more readable</p>
+						<p>We could stop here but lets see what we can do with the loop</p>
+					</aside>
+				</section>
+
+				<section>
+					<pre><code data-line-numbers="5-11|13-19|21-29" class="language-php">class Course
+{
+	protected array $lessons;
+
+	protected function calculateDuration(array $lessons): int
+	{
+		return array_reduce(
+			$lessons,
+			fn($acc, $lesson) => $acc + $lesson->getDuration()
+		, 0);
+	}
+
+	protected function commentsCount(array $lessons): int
+	{
+		return array_reduce(
+			$lessons,
+			fn($acc, $lesson) => $acc + $lesson->getCommentsCount()
+		, 0);
+	}
+
+	public function statement(): string
+	{
+		return sprintf(
+			'This course has %d lessons with %d comments and will take %d minutes to complete.',
+			count($this->lessons),
+			$this->calculateDuration($this->lessons),
+			$this->commentsCount($this->lessons)
+		);
+	}
+}
+					</code></pre>
+
+					<aside class="notes">
+						<p>Let's extract all lessons duration calculation in its own method. I'm using reduce here which makes this method short but it could make it less readable especially if you have a lot of juniors in your team. So this is something you need to consider when refactoring.</p>
+						<p>We do the same for course comments count</p>
+						<p>"statement" method now looks really short. We've inlined some temp variables as well</p>
+						<p>Some of you may notice that instead of one loop, we now have two. And this could have performance penalty.</p>
+						<p>In this particular case this isn't a problem but you need to consider this on each individual case. Sometimes performance would be severly degraded so this kind of refactoring would not be possible and we'd skip this last step</p>
+						<p>So why do it? We can re-use this methods in other places and don't have to duplicate code.</p>
+					</aside>
+				</section>
+
+				<section>
+					<h1>When to refactor?</h1>
+					<hr class="divider--blue" />
+				</section>
+
+				<section>
+					<h2 class="group-title group-title--blue">When to refactor?</h2>
+					<p>Rule of three</p>
+
+					<aside class="notes">
+						<ol>
+							<li>when doing it for the first time just do it</li>
+							<li>when doing something similar, just cringe, but do the same thing anyway. Although I'm all for DRY development, it can often lead to wrong and premature abstractions and bit you in the ass</li>
+							<li>when doing it for the third time you need to start refactoring it</li>
+						</ol>
+					</aside>
+				</section>
+				<section>
+					<h2 class="group-title group-title--blue">When to refactor?</h2>
+					<p>When you add a new feature</p>
+					<aside class="notes">
+						<p>Refactoring helps you understand other people's code. Easier to make changes in clean, refactored code.</p>
+					</aside>
+				</section>
+				<section>
+					<h2 class="group-title group-title--blue">When to refactor?</h2>
+					<p>When you fix a bug</p>
+					<aside class="notes">
+						<p></p>
+					</aside>
+				</section>
+				<section>
+					<h2 class="group-title group-title--blue">When to refactor?</h2>
+					<p>When implementing new feature using a new technique</p>
+					<aside class="notes">
+						<p>It is always a good idea to check and refactor places where you used some older idea, technique or pattern.</p>
+						<p>Maybe the old code can benefit from this new perspective or improved pattern.</p>
+						<p>And it is always better to have your code uniform.</p>
+					</aside>
+				</section>
+				<section>
+					<h2 class="group-title group-title--blue">When to refactor?</h2>
+					<p>During code review</p>
+					<aside class="notes">
+						<p></p>
+					</aside>
+				</section>
+				<section>
+					<h2 class="group-title group-title--blue">When to refactor?</h2>
+					<p>When procrastinating <br> <small>or needing a small win to get you started</small></p>
+					<aside class="notes">
+						<p>I keep a list of potential refactorings that could be done in the future as I work on a feature (or during refactoring something else).</p>
+						<p>It comes in handy after a vacation to ease me into coding or after feeling burned out with writing specifications or documentation.</p>
+					</aside>
+				</section>
+				<section>
+					<h2 class="group-title group-title--blue">When to refactor?</h2>
+					<p>If it stinks, change it</p>
+					<!-- (Dirty diaper image would be applicable here) -->
+					<aside class="notes">
+						<p>This is an old folks saying regarding child-rearing but it can be used for code as well.</p>
+					</aside>
+				</section>
+
+				<section>
+					<h1>Code Smells</h1>
+					<hr class="divider--green" />
+
+					<aside class="notes">
+						<p>Code smells are subtle (and most of the time not so subtle) signs that code is in a mess and should be refactored</p>
+					</aside>
+				</section>
+
+				<section>
+					<h2 class="group-title group-title--green">Code Smells</h2>
+					<p>Long Method</p>
+					<p class="fragment">Long Class</p>
+
+					<aside class="notes">
+						<p>We've covered "Long Method" in our previous example. We used "Extract Method" to refactor it.</p>
+						<p>Long Class is similar to the "Long Method" smell. </p>
+				</section>
+
+				<!--
+					Code Smell - Comments
+				-->
+				<section data-auto-animate>
+					<h2 class="group-title group-title--green">Code Smells</h2>
+					<p>Comments</p>
+					<aside class="notes">
+						<p>The best comment is a good name for a variable or method</p>
+					</aside>
+				</section>
+				<section data-auto-animate>
+					<h2 class="group-title group-title--green">Code Smells</h2>
+					<p>Comments</p>
+
+					<pre><code data-line-numbers="1-4|6-12|14-16" class="language-php">// $commentable is a lesson so it should only be made searchable if lesson is not published
+if ($commentable::class === Lesson::class && ! $commentable->isPublished()) {
+	// ...
+}
+
+class Lesson
+{
+	public function shouldBePublished(): bool
+	{
+		return $this->isPublished();
+	}
+}
+
+if ($commentable->shouldBePublished()) {
+	// ...
+}
+					</code></pre>
+
+					<aside class="notes">
+						<p>We are using extract method here to remove the need for the comment </p>
+					</aside>
+				</section>
+				<section data-auto-animate>
+					<h2 class="group-title group-title--green">Code Smells</h2>
+					<p>Comments</p>
+
+					<aside class="notes">
+						Comments still can be used and be useful - for example when explaining a complex algorithm and all other methods of simplifying it have been exhausted
+					</aside>
+				</section>
+
+				<!--
+					Code Smell - Primitive Obsession
+				-->
+				<section data-auto-animate>
+					<h2 class="group-title group-title--green">Code Smells</h2>
+					<p>Primitive Obsession</p>
+
+					<aside class="notes">
+						Use of primitives instead of small objects for simple tasks
+					</aside>
+				</section>
+				<section data-auto-animate>
+					<h2 class="group-title group-title--green">Code Smells</h2>
+					<p>Primitive Obsession</p>
+
+					<pre><code data-line-numbers="3-5" class="language-php">class Order
+{
+	public function pay(float $amount, string $currency = 'USD'): void
+	{
+		// ...
+	}
+}
+					</code></pre>
+				</section>
+				<section data-auto-animate>
+					<h2 class="group-title group-title--green">Code Smells</h2>
+					<p>Primitive Obsession</p>
+
+					<pre><code data-line-numbers="1-9|13-16" class="language-php">class Price
+{
+	public function __construct(
+		protected float $amount,
+		protected string $currency = 'USD'
+	) {
+		// ...
+	}
+}
+
+class Order
+{
+	public function pay(Price $price): void
+	{
+		// ...
+	}
+}
+					</code></pre>
+
+					<aside class="notes">
+						<p>Usually you start with just a simple single variable and then you just pile on</p>
+						<p>Much easier to add additional variable than create a whole new class</p>
+						<p>We can use <strong>Replace Data Value with Object</strong> or if used in method params like here <strong>Introduce Parameter Object</strong></p>
+					</aside>
+				</section>
+				<section data-auto-animate>
+					<h2 class="group-title group-title--green">Code Smells</h2>
+					<p>Primitive Obsession</p>
+
+					<pre><code data-line-numbers="1-5|7-11" class="language-php">$item = [
+	'name' => 'Beer',
+	'price' => 2.0,
+	'currency' => 'USD'
+];
+
+$item = new OrderItem(
+	name: 'Beer',
+	price: 2.0,
+	currency: 'USD'
+);
+					</code></pre>
+					<aside class="notes">
+						<p>In case arrays are used we can use <strong>Replace Array with Object</strong></p>
+					</aside>
+				</section>
+
+				<!--
+					Code Smells - Long Parameter List
+				-->
+				<section data-auto-animate>
+					<h2 class="group-title group-title--green">Code Smells</h2>
+					<p>Long Parameter List</p>
+
+					<aside class="notes">
+						<p>Methods with more than three params should be considered for refactoring.</p>
+						<p>Can happen when method has more than one responsibility</p>
+						<p>One way to refactor this is to use <strong>Introduce Parameter Object</strong> which we already used in primitive obsession.</p>
+					</aside>
+				</section>
+				<section data-auto-animate>
+					<h2 class="group-title group-title--green">Code Smells</h2>
+					<p>Long Parameter List</p>
+
+					<pre><code data-line-numbers="" class="language-php">class MemberService
+{
+	public function createMember(
+		Website $website,
+		string $email,
+		string $firstName,
+		string $lastName,
+		bool $sendNotification = false
+	): Member {
+		$member = Member::create([
+			'website_id' => $website->id,
+			'email' => $request->email,
+			'first_name' => $request->firstName,
+			'last_name' => $request->lastName
+		]);
+
+		if ($sendNotification) {
+			dispatch(SendNotification($website, $member));
+		}
+
+		return $member;
+	}
+}
+					</code></pre>
+
+					<aside class="notes">
+						<p>We have more than three params.</p>
+						<p>Some look like they could be grouped.</p>
+						<p>And we have a "flag" param with a default value.</p>
+						<p>It is hard to read and to understand what this method does.</p>
+					</aside>
+				</section>
+				<section data-auto-animate>
+					<h2 class="group-title group-title--green">Code Smells</h2>
+					<p>Long Parameter List</p>
+
+					<pre><code data-line-numbers="" class="language-php">class MemberService
+{
+	public function createMember(
+		Website $website,
+		CreateMemberRequest $request,
+		bool $sendNotification = false
+	): Member {
+		$member = Member::create([
+			'website_id' => $website->id,
+			'email' => $request->email,
+			'first_name' => $request->firstName,
+			'last_name' => $request->lastName
+		]);
+
+		if ($sendNotification) {
+			dispatch(SendNotification($website, $member));
+		}
+
+		return $member;
+	}
+}
+					</code></pre>
+
+					<aside class="notes">
+						<p>Here we can use <strong>Preserve Whole Object</strong> to retain all member data.</p>
+					</aside>
+				</section>
+				<section data-auto-animate>
+					<h2 class="group-title group-title--green">Code Smells</h2>
+					<p>Long Parameter List</p>
+
+					<pre><code data-line-numbers="3-13|15-24" class="language-php">class MemberService
+{
+	public function createMember(
+		Website $website,
+		CreateMemberRequest $request
+	): Member {
+		return Member::create([
+			'website_id' => $website->id,
+			'email' => $request->email,
+			'first_name' => $request->firstName,
+			'last_name' => $request->lastName
+		]);
+	}
+
+	public function createMemberAndSendNotification(
+		Website $website,
+		CreateMemberRequest $request
+	): Member {
+		$member = $this->createMember($website, $request);
+
+		dispatch(SendNotification($website, $member));
+
+		return $member;
+	}
+}
+					</code></pre>
+
+					<aside class="notes">
+						<p>Then we can use "remove flag argument" to create a separate method.</p>
+					</aside>
+				</section>
+
+				<!--
+					Code Smell - Shotgun Surgery
+				 -->
+				<section data-auto-animate>
+					<h2 class="group-title group-title--green">Code Smells</h2>
+					<p>Shotgun Surgery</p>
+
+					<aside class="notes">
+						<p>This smell often overlaps with duplicate code smell.</p>
+						<p>If you have a part of the codebase that everybody is afraid to touch because if you change something there, something breaks on the other end, usually it is because of the shotgun surgery.</p>
+						<p>As an interesting tidbit, this smell has cause more keyboard related violence than any other smell.</p>
+						<p>Simply, shotgun surgery is when you have to go to multiple places in your codebase and make the same change.</p>
+					</aside>
+				</section>
+				<section data-auto-animate>
+					<h2 class="group-title group-title--green">Code Smells</h2>
+					<p>Shotgun Surgery</p>
+
+					<pre><code data-line-numbers="" class="language-php">class MakeCommentSearchable
+{
+	public function shouldBeSearchable(): bool
+	{
+		if ($comment->created_at < now()->subHours(3)) {
+			return false;
+		}
+
+		return true;
+	}
+}
+
+class ShowComments
+{
+	public function shouldBeDisplayed(): bool
+	{
+		if ($comment->created_at < now()->subHours(3)) {
+			return false;
+		}
+
+		return true;
+	}
+}
+					</code></pre>
+
+					<aside class="notes">
+						<p>Not only we have a duplicate code to decide whether a comment was created in the last hour, we have to remember to change this in multiple locations.</p>
+					</aside>
+				</section>
+				<section data-auto-animate>
+					<h2 class="group-title group-title--green">Code Smells</h2>
+					<p>Shotgun Surgery</p>
+
+					<pre><code data-line-numbers="1-10|12-20" class="language-php">class Comment {
+	public function wasCreatedRecently(): bool
+	{
+		if ($this->created_at < now()->subHours(3)) {
+			return false;
+		}
+
+		return true;
+	}
+}
+
+public function shouldBeSearchable(): bool
+{
+	return $comment->wasCreatedRecently();
+}
+
+public function shouldBeDisplayed(): bool
+{
+	return $comment->wasCreatedRecently();
+}
+					</code></pre>
+					<aside class="notes">
+						<p>We used <strong>move method</strong> to move the conditional so it can be reused.</p>
+					</aside>
+				</section>
+
+				<!--
+					Code Smells - Inappropriate Intimacy
+				-->
+				<section data-auto-animate>
+					<h2 class="group-title group-title--green">Code Smells</h2>
+					<p>Inappropriate Intimacy</p>
+
+					<aside class="notes">
+						<p>Keep a close eye on classes that spend too much time together.</p>
+						<p>Good classes should know as little about each other as possible.</p>
+					</aside>
+				</section>
+				<section data-auto-animate>
+					<h2 class="group-title group-title--green">Code Smells</h2>
+					<p>Inappropriate Intimacy</p>
+
+					<pre><code data-line-numbers="" class="language-php">class Member
+{
+	public function getFullAddress(): string
+	{
+		$output = $this->address->street . ' ' . $this->houseNumber;
+		$output .= ', ' . $this->address->city . ' ' . $this->address->zipCode;
+
+		if ($this->address->state) {
+			$output .= ', ' . $this->address->state;
+		}
+
+		$output .= ', ' . $this->address->country;
+
+		return $output;
+	}
+}
+					</code></pre>
+
+					<aside class="notes">
+						<p>Member access address class internal properties way too much.</p>
+					</aside>
+				</section>
+				<section data-auto-animate>
+					<h2 class="group-title group-title--green">Code Smells</h2>
+					<p>Inappropriate Intimacy</p>
+
+					<pre><code data-line-numbers="1-16|18-21" class="language-php">class Address
+{
+	public function getFullAddressAsString(): string
+	{
+		$output = $this->street . ' ' . $this->houseNumber;
+		$output .= ', ' . $this->city . ' ' . $this->zipCode;
+
+		if ($this->state) {
+			$output .= ', ' . $this->state;
+		}
+
+		$output .= ', ' . $this->country;
+
+		return $output;
+	}
+}
+
+public function getFullAddress(): string
+{
+	return $this->address->getFullAddress();
+}
+					</code></pre>
+
+					<aside class="notes">
+						<p>We'll use "Hide delegate" to handle this.</p>
+					</aside>
+				</section>
+
+				<!--
+					Code Smells - Feature Envy
+				-->
+				<section>
+					<h2 class="group-title group-title--green">Code Smells</h2>
+					<p>Feature Envy</p>
+
+					<aside class="notes">
+						<p>Feature Envy is quite similar to Inappropriate Intimacy</p>
+						<p>But instead of a class using internal properties of a different class, it is a method that uses public properties and methods of different class way more than it uses its own.</p>
+						<p>Not as big of a problem, but it is a sign of entanglement which should be dealt with.</p>
+					</aside>
+				</section>
+
+				<section>
+					<h2 class="group-title group-title--green">Code Smells</h2>
+					<p>Dead Code</p>
+					<p class="fragment">Duplicate Code</p>
+
+					<aside class="notes">
+						<p>When requirements for the software have changed or corrections have been made, nobody had time to clean up the old code. Such code could also be found in complex conditionals, when one of the branches becomes unreachable</p>
+				</section>
+
+				<section>
+					<h1>Techniques</h1>
+					<hr class="divider--red" />
+
+					<aside class="notes">
+						<p>We've already covered several refactoring techniques in our example and when explaining code smells.</p>
+						<p>But there are still some that are worth mentioning</p>
+					</aside>
+				</section>
+				<section>
+					<h2 class="group-title group-title--red">Techniques</h2>
+					<p>Extract Method / Class</p>
+					<p class="fragment">Move Method</p>
+					<p class="fragment">Replace Temp with Query</p>
+
+					<aside class="notes">
+						<p>Extract Method is used to break down a long method into smaller ones</p>
+						<p>Move Method is used to move a method to a more appropriate class</p>
+						<p>Replace Temp with Query is used to replace a temporary variable with a method call</p>
+					</aside>
+				</section>
+				<section>
+					<h2 class="group-title group-title--red">Techniques</h2>
+					<p>Replace Data Value with Object</p>
+					<p>Introduce Parameter Object</p>
+					<p>Replace Array with Object</p>
+
+					<aside class="notes">
+						<p>We've used these when dealing with Primitive Obsession smell</p>
+					</aside>
+				</section>
+
+				<!--
+					Technique - Introduce Explaining Variable
+				-->
+				<section data-auto-animate>
+					<h2 class="group-title group-title--red">Techniques</h2>
+					<p>Introduce Explaining Variable</p>
+
+					<aside class="notes">
+						Used when you have a complicated expression or conditional and wish to make it more readable
+					</aside>
+				</section>
+				<section data-auto-animate>
+					<h2 class="group-title group-title--red">Techniques</h2>
+					<p>Introduce Explaining Variable</p>
+
+					<pre><code data-line-numbers="1-5|7-12" class="language-php">if (($platform->toUpperCase()->indexOf("MAC") > -1)
+&& ($browser->toUpperCase()->indexOf("IE") > -1)
+&& $this->wasInitialized()) {
+	// ...
+}
+
+$isMacOs = $platform->toUpperCase()->indexOf("MAC") > -1;
+$isIE = $browser->toUpperCase()->indexOf("IE")  > -1;
+
+if ($isMacOs && $isIE && $this->wasInitialized()) {
+	// ...
+}
+					</code></pre>
+				</section>
+
+				<!--
+					Techinque - Hide Delegate
+				-->
+				<section data-auto-animate>
+					<h2 class="group-title group-title--red">Techniques</h2>
+					<p>Hide Delegate</p>
+
+					<aside class="notes">
+						Used to hide complexity between client and server classes. The less the client needs to know about the server the better
+					</aside>
+				</section>
+				<section data-auto-animate>
+					<h2 class="group-title group-title--red">Techniques</h2>
+					<p>Hide Delegate</p>
+
+					<pre><code data-line-numbers="1|3" class="language-php">$lesson->getVideo()->getDuration();
+
+$lesson->getVideoDuration();
+					</code></pre>
+				</section>
+
+				<!--
+					Techinque - Remove Middle Man
+				-->
+				<section data-auto-animate>
+					<h2 class="group-title group-title--red">Techniques</h2>
+					<p>Remove Middle Man</p>
+
+					<aside class="notes">
+						But if we need to add excessive number of delegate methods then we this "opposite" technique.
+					</aside>
+				</section>
+				<section data-auto-animate>
+					<h2 class="group-title group-title--red">Techniques</h2>
+					<p>Remove Middle Man</p>
+
+					<pre><code data-line-numbers="1|3" class="language-php">$lesson->getVideoType();
+
+$lesson->getVideo()->getType();
+					</code></pre>
+
+					<aside class="notes">
+						For example if we were to add additional features to the video it would complicate things.
+					</aside>
+				</section>
+
+				<!--
+					Techinque - Introduce Foreign Method
+				-->
+				<section data-auto-animate>
+					<h2 class="group-title group-title--red">Techniques</h2>
+					<p>Introduce Foreign Method</p>
+
+					<aside class="notes">
+						<p>an interesting one which you can utilize to add needed features to a 3rd party or external library classes without the need of adding a proxy class</p>
+						<p> Feels a bit dirty but it can save you time and more importantly it will allow you to avoid code duplication</p>
+					</aside>
+				</section>
+				<section data-auto-animate>
+					<h2 class="group-title group-title--red">Techniques</h2>
+					<p>Introduce Foreign Method</p>
+
+					<pre><code data-line-numbers="2-7" class="language-php">class Report {
+	public function sendReport()
+	{
+		$previousReportDate = clone $this->previousReportDate;
+		$paymentDate = $previousReportDate->modify("+7 days");
+		// ...
+	}
+}
+					</code></pre>
+
+					<aside class="notes">
+
+					</aside>
+				</section>
+				<section data-auto-animate>
+					<h2 class="group-title group-title--red">Techniques</h2>
+					<p>Introduce Foreign Method</p>
+
+					<pre><code data-line-numbers="2-6|8-16" class="language-php">class Report {
+	public function sendReport()
+	{
+		$paymentDate = $this->nextWeek($this->previousReportDate);
+		// ...
+	}
+
+	/**
+	 * Foreign method. Should be in Date.
+	*/
+	private function nextWeek(DateTime $date)
+	{
+		$previousReportDate = clone $date;
+
+		return $previousReportDate->modify("+7 days");
+	}
+}
+					</code></pre>
+
+					<aside class="notes">
+						<p>We introduce a foreign method to the DateTime class</p>
+						<p>As we've passed in a DateTime object we have access to all of its fields and can do whatever we want</p>
+					</aside>
+				</section>
+
+				<!--
+					Techinque - Introduce Local Extension
+				-->
+				<section>
+					<h2 class="group-title group-title--red">Techniques</h2>
+					<p>Introduce Local Extension</p>
+
+					<aside class="notes">
+						<p>When you can't use Introduce Foreign Method or have many methods that you want to extend it with, you can use Introduce Local Extension</p>
+						<p>It is a bit more complicated and it is used when you can't modify the class you want to extend</p>
+						<p>This is basically a proxy pattern</p>
+					</aside>
+				</section>
+
+				<!--
+					Techinque - Replace Magic Number with Symbolic Constant
+				-->
+				<section data-auto-animate>
+					<h2 class="group-title group-title--red">Techniques</h2>
+					<p>Replace Magic Number with Symbolic Constant</p>
+
+					<aside class="notes">
+						<p>Used when you have a number in your code that is not clear what it represents</p>
+						<p>For example, if you have a method that returns 1, 2, or 3 and you have no idea what those numbers represent</p>
+				</section>
+				<section data-auto-animate>
+					<h2 class="group-title group-title--red">Techniques</h2>
+					<p>Replace Magic Number with Symbolic Constant</p>
+
+					<pre><code data-line-numbers="1-12|14-17" class="language-php">class CommentService
+{
+	public function getPublishedComments()
+	{
+		return Comment::where('status', 2)->get();
+	}
+
+	public function getPendingComments()
+	{
+		return Comment::where('status', 1)->get();
+	}
+}
+
+public function getPublishedComments()
+{
+	return Comment::where('status', 'published')->get();
+}
+					</code></pre>
+
+					<aside class="notes">
+						<p>Sure, from the method name you can see what these magic number means, but this is still a bad idea</p>
+						<p>strings could be used as values for status (status=”approved”) but integers should be more performant</p>
+						<p>also “magic strings” should also be converted to constants in order to allow easy find-replace</p>
+					</aside>
+				</section>
+				<section data-auto-animate>
+					<h2 class="group-title group-title--red">Techniques</h2>
+					<p>Replace Magic Number with Symbolic Constant</p>
+
+					<pre><code data-line-numbers="" class="language-php">class Comment
+{
+	const STATUS_PUBLISHED = 2;
+	const STATUS_PENDING = 1;
+}
+
+public function getPublishedComments()
+{
+	return Comment::where('status', Comment::STATUS_PENDING)->get();
+}
+					</code></pre>
+
+					<aside class="notes">
+
+					</aside>
+				</section>
+
+				<!--
+					Techinque - Decompose Conditional
+				-->
+				<section data-auto-animate>
+					<h2 class="group-title group-title--red">Techniques</h2>
+					<p>Decompose Conditional</p>
+
+					<aside class="notes">
+						<p>When having a complex if / then / else conditional makes it hard for you to read or to understand what is going on.</p>
+						<p>Break it down into separate methods for condition, then and else.</p>
+					</aside>
+				</section>
+				<section data-auto-animate>
+					<h2 class="group-title group-title--red">Techniques</h2>
+					<p>Decompose Conditional</p>
+
+					<pre><code data-line-numbers="" class="language-php">class Order
+{
+	public function calculateTotal()
+	{
+		if ($this->taxSettings->includeVat === true && $this->taxSettings->chargeVat === true && $this->taxSettings->vatPercentage > 0 && $this->customer->vatValid === false) {
+			$price = $this->price * (1 + $this->taxSettings->vatPercentage / 100);
+			$total = $price * $quantity;
+		} else {
+			$price = $this->price;
+			$total = $price * $quantity;
+		}
+
+		return $total;
+	}
+}
+					</code></pre>
+
+					<aside class="notes">
+						Doesn't matter if you list conditions in one line or in multiple lines, it is still hard to read and understand
+					</aside>
+				</section>
+				<section data-auto-animate>
+					<h2 class="group-title group-title--red">Techniques</h2>
+					<p>Decompose Conditional</p>
+
+					<pre><code data-line-numbers="" class="language-php">class Order
+{
+	public function calculateTotal()
+	{
+		if (
+			$this->taxSettings->includeVat === true
+			&& $this->taxSettings->chargeVat === true
+			&& $this->taxSettings->vatPercentage > 0
+			&& $this->customer->vatValid === false
+		) {
+			$price = $this->price * (1 + $this->taxSettings->vatPercentage / 100);
+			$total = $price * $this->quantity;
+		} else {
+			$price = $this->price;
+			$total = $price * $this->quantity;
+		}
+
+		return $total;
+	}
+}
+					</code></pre>
+
+					<aside class="notes">
+
+					</aside>
+				</section>
+				<section data-auto-animate>
+					<h2 class="group-title group-title--red">Techniques</h2>
+					<p>Decompose Conditional</p>
+
+					<pre><code data-line-numbers="1-5|7-12|14-17|19-26" class="language-php">protected function shouldChargeVat(TaxSettings $taxSettings, Customer $customer)
+{
+	return $taxSettings->includeVat === true && $taxSettings->chargeVat === true
+		&& $taxSettings->vatPercentage > 0 && $customer->vatValid === false;
+}
+
+protected function calculateTotalVatIncluded()
+{
+	return $this->price
+		* (1 + $this->taxSettings->vatPercentage / 100)
+		* $this->quantity;
+}
+
+protected function calculateTotalWithoutVat()
+{
+	return $this->price * $this->quantity;
+}
+
+public function calculateTotal()
+{
+	if ($this->shouldChargeVat($this->taxSettings, $this->customer)) {
+		return $this->calculateTotalVatIncluded();
+	}
+
+	return $this->calculateTotalWithoutVat();
+}
+					</code></pre>
+
+					<aside class="notes">
+
+					</aside>
+				</section>
+
+				<!-- <section>
+					Consolidate Conditional Expression
+				</section> -->
+
+				<!-- <section>
+					Replace Nested Conditional with Guard Clauses
+				</section> -->
+
+				<section>
+					<h1>More than one way to skin the cat</h1>
+					<hr class="divider--blue" />
+
+					<aside class="notes">
+						<p>There are many ways to refactor code</p>
+						<p>It is important to find the one that suits you and your team the best</p>
+						<p>One code segment can be refactored in many different ways</p>
+						<p>And not only that, it can be refactored in opposite directions at different times</p>
+				</section>
+				<section>
+					<h2 class="group-title group-title--blue">More than one way to skin the cat</h2>
+
+					<p>Hide delegate VS Remove middle man</p>
+					<p class="fragment">Extract method VS Inline method</p>
+					<p class="fragment">Add parameter VS Remove parameter</p>
+					<p class="fragment">Parametrize method VS Replace parameter with explicit methods</p>
+					<p class="fragment">Replace error code with exception VS Replace exception with test</p>
+				</section>
+
+				<section>
+					<h1>Next Steps</h1>
+					<hr class="divider--blue" />
+				</section>
+				<section data-auto-animate>
+					<h2 class="group-title group-title--blue">Next Steps</h2>
+
+					<p><strong>Refactoring</strong> by Michael Fowler</p>
+					<p>https://refactoring.com</p>
+
+					<aside class="notes">
+						<p>Golden standard is of course a book by Martin Fowler called “Refactoring”. </p>
+						<p>Mr. Fowler obviously spends his time writing books and not doing creative thinking how to name his books</p>
+					</aside>
+				</section>
+				<section data-auto-animate>
+					<h2 class="group-title group-title--blue">Next Steps</h2>
+
+					<p>https://refactoring.guru</p>
+
+					<aside class="notes">
+						My personal recommendation is a Refactoring guru website as it offers both the theory behind the code smells, techniques, gives examples and is a library of design patterns.
+					</aside>
+				</section>
+				<section data-auto-animate>
+					<h2 class="group-title group-title--blue">Next Steps</h2>
+
+					<p>https://kata-log.rocks/refactoring</p>
+
+					<aside class="notes">
+						After you did all the reading and are fluent with the domain and the names, you should start with doing exercises and a good place to start is with code katas
+					</aside>
+				</section>
+				<section data-auto-animate>
+					<h2 class="group-title group-title--blue">Next Steps</h2>
+
+					<p>Mikado Method</p>
+
+					<aside class="notes">
+						<p>Yes, the name of the method is from the pickup sticks game because you carefully extract each intertwined dependency until you expose the central issue, without collapsing the project.</p>
+						<p>I’d only recommend it if you like reading in bed and having trouble falling a sleep.</p>
+					</aside>
+				</section>
+
+				<!-- Conclusion -->
+				<section>
+					<h1>Philosophy of Code Refactoring</h1>
+					<hr class="divider--yellow" />
+				</section>
+				<section>
+					<h2 class="group-title group-title--blue">Philosophy of Code Refactoring</h2>
+					<p>Leave the code in better shape than you found it</p>
+
+					<aside class="notes">
+						<p>From zen-budhism</p>
+						<p>If you fix one little issue, rename one param or method to be more clear the code will be better than before</p>
+					</aside>
+				</section>
+
+				<section>
+					<section>
+						<h1>Questions</h1>
+						<img src="dist/media/weblica-questions.jpg" style="height: 50vh" />
+					</section>
+					<section>
+						<p><strong>Class</strong> is an extensible program-code-template for creating objects, providing initial values for state (member variables) and implementations of behavior (member functions or methods)</p>
+
+						<aside class="notes">
+							Klasa je predložak programskog koda za kreiranje objekata. Sastoji se od podataka (članskih varijabli) i ponašanja (članskih funkcija ili metoda)
+						</aside>
+					</section>
+					<section>
+						<p><strong>Object</strong> is called an instance of the class, and the member variables specific to the object are called instance variables</p>
+
+						<aside class="notes">
+							Objekt je konkretna instanca klase sa svojim podacima (varijablama)
+						</aside>
+					</section>
+					<section>
+						<p><strong>Facade</strong> is a structural design pattern that provides a simple interface to a complex subsystem which contains lots of moving parts</p>
+
+						<aside class="notes">
+							Fasada je strukturni dizajn pattern (obrazac) koji pruža jednostavan interfejs za kompleksni podsustav koji sadrži mnogo pokretnih dijelova
+						</aside>
+					</section>
+				</section>
+			</div>
+		</div>
+
+		<script src="dist/reveal.js"></script>
+		<script src="plugin/notes/notes.js"></script>
+		<script src="plugin/markdown/markdown.js"></script>
+		<script src="plugin/highlight/highlight.js"></script>
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				hash: true,
+
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+			});
+		</script>
+	</body>
+</html>
