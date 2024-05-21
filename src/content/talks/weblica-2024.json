@@ -1,7 +1,7 @@
 {
     "title": "Refactoring: The Art and Craft of Code Improvement",
     "description": "Refactoring is like a makeover for your code, keeping it tidy and efficient without changing what it does. It's essential for code hygiene, making it easier to read, maintain, and even boosting performance.",
-    "url": "/talks/refactoring-weblica-2024/index.html",
+    "url": "/refactoring-weblica-2024/index.html",
     "conference": "Weblica",
     "conferenceUrl": "https://weblica.hr/en/",
     "date": "2024-05-10"
