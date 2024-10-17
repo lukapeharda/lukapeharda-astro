@@ -1,0 +1,111 @@
+---
+title: "When does the TDD approach make sense?"
+url: "/article/when-does-the-tdd-approach-make-sense/"
+date: "2024-10-17"
+excerpt: "To do TDD or not to do TDD? That is the question. Personally I never bought into TDD practices. But I always use TDD when I need to develop a feature that will require me to test a lot of different variants and edge cases."
+---
+
+import H2 from '../../components/articles/H2.astro';
+import Strong from '../../components/articles/Strong.astro';
+import Divider from '../../components/Divider.astro';
+import Emphasis from '../../components/articles/Emphasis.astro';
+import Paragraph from '../../components/articles/Paragraph.astro';
+
+export const components = {
+    p: Paragraph,
+    h2: H2,
+    hr: Divider,
+    em: Emphasis,
+    strong: Strong
+};
+
+I don't like *writing* tests. But I like *having* tests. They give me a sense of security and confidence that my code works as expected.
+
+I never bought into TDD practices.
+
+I know the approach can be very useful and in the long run it can save you time and money. But there is always a time pressure when developing features and not enough time to write tests.
+
+But I always start with TDD when I need to develop a feature that will require me to test a lot of different variants and edge cases, and especially when there are a lot of clicking and moving parts and especially when external platforms and APIs are involved.
+
+## Adding Order::nextPaymentAmount method
+
+Let me give you an example from the project that I'm working on.
+
+I had to add a method **nextPaymentAmount** to the **Order** class which would return the amount of the next recurring payment.
+
+Payment can be a one-time, a subscription, or installment plan. It can have setup fees and trials. It can have discounts and coupons. Coupons can be applied only to the first payment or to all recurring payments as well. It can have taxes. It can have a lot of different scenarios.
+
+A lot of unnecessary clicking to test all of these combinations manually.
+
+## TDD to the rescue
+
+In scenarios like above, I always use TDD and it saves me incredible amounts of time.
+
+I'm not strictly adhering to TDD practices. I skip steps.
+
+First, I write down all test cases that I can think of.
+
+```php
+class NextPaymentAmountTest extends TestCase
+{
+    ...
+
+    public function testOneTimePaymentHasNoNextPayment(): void
+    {}
+
+    public function testSubscriptionHasNextPayment(): void
+    {}
+
+    public function testSubscriptionWithSetupFeeHasNextPaymentWithDifferentAmount(): void
+    {}
+
+    public function testSubcriptionWithBasicCouponHasNextPaymentWithoutDiscount(): void
+    {}
+
+    public function testSubscriptionWithRecurringCouponHasNextPaymentWithDiscount(): void
+    {}
+
+    ...
+}
+```
+
+Then I focus on a single case.
+
+```php
+...
+
+public function testOneTimePaymentHasNoNextPayment(): void
+{
+    // Arrange
+    $pricingPlan = factory(PricingPlan::class)->create([
+        'type' => 'one-time',
+        'amount' => 100
+    ]);
+
+    $order = factory(Order::class)->create([
+        'pricing_plan_id' => $pricingPlan->id,
+        'member_id' => $this->member->id,
+        'membership_id' => $this->membership->id
+    ]);
+
+    // Act
+    $nextPaymentAmount = $order->nextPaymentAmount();
+
+    // Assert
+    $this->assertEquals(0, $nextPaymentAmount);
+}
+
+...
+```
+
+At first, test fails because the function that I'm testing (**Order::nextPaymentAmount**) is not yet implemented. Then I implement it just so the test passes.
+
+Each test case is a small step towards the final implementation and adds a bit of code or conditional.
+
+Usually, as I go along these cases and write code to pass them, I find a lot more edge cases that need to be covered.
+
+---
+
+Using this iterative approach I'm positive that I've covered most of the possible scenarios. And more importantly, I wasn't overwhelmed with "loading" all edge cases in my head before implementing the feature.
+
+TDD not only saved me a lot of time, but gave me confidence that the feature works as expected. And that it will work as we extend it in the future.
