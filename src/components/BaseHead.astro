@@ -31,6 +31,8 @@ import GoogleAnalytics from './GoogleAnalytics.astro';
 <meta name="title" content={title} />
 <meta name="description" content={description} />
 
+<link rel="alternate" type="application/rss+xml" title="RSS Feed" href={Astro.site + 'rss.xml'}>
+
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website" />
 <meta property="og:url" content={Astro.url} />
