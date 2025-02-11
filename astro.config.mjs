@@ -11,5 +11,7 @@ export default defineConfig({
   integrations: [mdx(), sitemap(), tailwind(), react()],
   experimental: {
     viewTransitions: true
-  }
+  },
+  output: 'static',
+  outDir: './dist'
 });

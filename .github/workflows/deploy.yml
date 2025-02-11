@@ -32,10 +32,13 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: List build directory
+        run: ls -la dist
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: dist    # Verify this matches your Astro output directory
+          path: ./dist
 
   deploy:
     needs: build
