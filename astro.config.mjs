@@ -8,10 +8,10 @@ import react from "@astrojs/react";
 // https://astro.build/config
 export default defineConfig({
   site: 'https://lukapeharda.com',
+  base: 'lukapeharda/lukapeharda-astro',
   integrations: [mdx(), sitemap(), tailwind(), react()],
   experimental: {
     viewTransitions: true
   },
-  output: 'static',
-  outDir: './dist'
+  output: 'static'
 });
