@@ -47,7 +47,7 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: List Available Artifacts
-        run: ls -la ${{ runner.temp }}/_github_home/_github_work/_temp
+        run: ls -la ${{ runner.temp }}
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v2
