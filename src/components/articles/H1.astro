@@ -1,0 +1,6 @@
+---
+const props = Astro.props;
+---
+<h1 {...props} class="text-white light-mode:text-gray-800 text-4xl italic text-balance mb-0">
+    <slot />
+</h1>

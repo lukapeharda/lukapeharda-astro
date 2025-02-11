@@ -1,0 +1,54 @@
+---
+import MainLayout from "../../layouts/MainLayout.astro";
+
+import { fetchGithubContent } from '../../lib/github';
+import { marked } from 'marked';
+import { parseMarkdownGroups } from "../../lib/tils";
+import ColorLink from "../../components/ColorLink.astro";
+
+const GITHUB_TILS_INDEX_URL = 'https://raw.githubusercontent.com/lukapeharda/til/refs/heads/master/README.md';
+
+// Fetch and parse the main index
+const indexContent = await fetchGithubContent(GITHUB_TILS_INDEX_URL);
+const parsed = marked.lexer(indexContent);
+const groups = parseMarkdownGroups(parsed);
+
+const colors = ['red', 'yellow', 'green', 'blue'];
+
+function generateRandomizedArray(strings) {
+    const result = [];
+    const length = strings.length;
+
+    for (let i = 0; i < 100; i++) {
+        let randomIndex;
+        do {
+            randomIndex = Math.floor(Math.random() * length);
+        } while (result.length > 0 && result[result.length - 1] === strings[randomIndex]);
+
+        result.push(strings[randomIndex]);
+    }
+
+    return result;
+}
+
+const randomizedColors = generateRandomizedArray(colors);
+---
+
+<MainLayout title="TIL" description="Collection of small tidbits of knowledge">
+    <div class="h-full w-full xl:w-1/2 md:w-2/3 p-4 md:p-8">
+        <h1 class="text-white light-mode:text-gray-800 text-4xl italic text-balance mb-4">TIL</h1>
+        <p class="pb-3 text-slate-400 light-mode:text-slate-800 text-xl">A collection of small tidbits of knowledge I learned developing software. Ones that are too short for an article but worth saving. Inspired by <ColorLink color="blue" target="_blank" href="https://github.com/jbranchaud/til/">jbranchaud/til</ColorLink>.</p>
+        <p class="pb-3 text-slate-400 light-mode:text-slate-800">* TIL is an acronym for Today I Learned.</p>
+        {groups.map((group, groupIndex) => (
+            <section>
+                <h2 class="text-white light-mode:text-slate-800 text-2xl italic mt-8 mb-4">{group.heading}</h2>
+                {group.items.map((item, itemIndex) => (
+                    <div class="mb-4 text-xl">
+                        <ColorLink href={`/til/${item.slug}/`} color={ colors[(groupIndex + itemIndex) % 4] }>{item.title}</ColorLink>
+                    </div>
+                ))}
+            </section>
+        ))}
+    </div>
+
+</MainLayout>

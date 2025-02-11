@@ -6,8 +6,6 @@ import TweetLink from '../../components/TweetLink.astro';
 import Divider from '../../components/Divider.astro';
 import PrevNext from '../../components/PrevNext.astro';
 
-
-
 export async function getStaticPaths() {
     const posts = await getCollection('article');
     const numberOfPosts = posts.length;
