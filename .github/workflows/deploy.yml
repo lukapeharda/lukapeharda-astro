@@ -49,7 +49,7 @@ jobs:
       - name: Debug: List Available Artifacts
         run: |
           echo "Checking available artifacts..."
-          ls -la ${{ runner.temp }}/_github_home/_github_work/_temp
+          ls -la ${{ runner.temp }}
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v2
