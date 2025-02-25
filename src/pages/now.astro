@@ -2,7 +2,7 @@
 import MainLayout from '../layouts/MainLayout.astro';
 import Divider from '../components/Divider.astro';
 
-const now = new Date('2024-10-03');
+const now = new Date('2025-02-25');
 ---
 
 <MainLayout title="What I'm doing right now" description="This page tells you what I'm working on at the moment and what are my current interests">
@@ -14,9 +14,9 @@ const now = new Date('2024-10-03');
             <h1 class="text-white light-mode:text-slate-800 italic text-4xl mt-8">What I'm doing right <span class="text-e6n-yellow">now</span></h1>
             <p class="text-slate-400 light-mode:text-slate-800 text-sm pb-4">{ now.toDateString() }</p>
 
-            <p class="pb-3 text-white light-mode:text-slate-800 text-xl">Almost six months have passed since my last update and I've been mainly working on the same things - adding Stripe payments to <a href="https://kourses.com/" class="border-b border-e6n-blue hover:bg-e6n-blue" target="_blank">Kourses</a>.</p>
-            <p class="pb-3 text-white light-mode:text-slate-800 text-xl">I thought I would be finished in two months but as this is almost mission-critical code we wanted to spend extra time for testing and polishing. Besides, we ended up adding a lot more features than we initially planned as we wanted to give our customers freedom to setup payments according to their needs.</p>
-            <p class="pb-3 text-white light-mode:text-slate-800 text-xl">And of course, we need to have everything our competitors have as well 😜</p>
+            <p class="pb-3 text-white light-mode:text-slate-800 text-xl">I'm currently putting the finishing touches on order bumps for the <a href="https://kourses.com/" class="border-b border-e6n-blue hover:bg-e6n-blue" target="_blank">Kourses</a> checkout system. Order bumps are strategic add-on offers that appear during the checkout process, allowing customers to easily add complementary products or upgrades with a single click.</p>
+            <p class="pb-3 text-white light-mode:text-slate-800 text-xl">We wanted to make them simple to use but powerful. And I believe we achieved that.</p>
+            <p class="pb-3 text-white light-mode:text-slate-800 text-xl">Last month, we successfully launched cart abandonment recovery — a powerful feature that helps users restore failed purchases and reconnect with potential customers who left before completing their transaction.</p>
         </div>
     </div>
 </MainLayout>
