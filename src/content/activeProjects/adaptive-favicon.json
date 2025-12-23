@@ -1,0 +1,10 @@
+{
+    "id": "adaptive-favicon",
+    "title": "Adaptive Favicon",
+    "url": "https://adaptivefavicon.com/?utm_source=website&utm_medium=post&utm_campaign=luka-peharda-com",
+    "description": "<p><strong>Simple web app that generates adaptive favicons that change based on the user's system theme (light/dark mode).</strong></p><br /><p>Generate your own adaptive favicon and make your website more engaging!</p>",
+    "image": "/adaptive-favicon-2.png",
+    "technologies": ["reactjs", "nextjs", "svg", "tailwindcss", "firebase", "vibecoded"],
+    "color": "green",
+    "hoverColor": "red"
+}
