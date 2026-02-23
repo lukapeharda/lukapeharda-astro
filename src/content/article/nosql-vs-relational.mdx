@@ -1,0 +1,100 @@
+---
+title: "Do We Still Need NoSQL in 2026?"
+url: "/article/nosql-vs-relational/"
+date: "2026-02-23"
+excerpt: "I graduated university in 2007. Back then, databases meant one thing: tables, rows, and relationships. A user has orders. Orders have products. Everything is connected, and you draw those connections carefully on a whiteboard before you write a single line of code."
+---
+
+import Divider from '../../components/Divider.astro';
+import H2 from '../../components/articles/H2.astro';
+import Paragraph from '../../components/articles/Paragraph.astro';
+import Emphasis from '../../components/articles/Emphasis.astro';
+export const components = {
+    h2: H2,
+    p: Paragraph,
+    hr: Divider,
+    em: Emphasis,
+};
+
+I graduated university in 2007. Back then, databases meant one thing: tables, rows, and relationships. A user has orders. Orders have products. Everything is connected, and you draw those connections carefully on a whiteboard (or a notebook) before you write a single line of code.
+
+That's just how data works, right? Things in the real world are related to each other. It makes sense to model that. Similar how classes in OOP are a natural way to model real-world entities, relational databases felt like the natural way to model real-world data.
+
+Then NoSQL came along. Suddenly, you could just throw data into a big flexible blob without worrying too much about structure or relationships. It was like someone had looked at a filing cabinet and said "what if we just used a pile on the floor instead?"
+
+Maybe that's my bias showing, or my old age. But I've been sitting with this question for a while now: **do we actually need NoSQL databases in 2026, or have I just not updated my thinking since 2007?**
+
+Let me try to work through it "on-paper" here.
+
+***
+
+## What even is NoSQL?
+
+If you're not a developer, here's the short version. A traditional relational database (like PostgreSQL or MySQL) stores data in structured tables, kind of like spreadsheets, and lets you link those tables together. NoSQL is a term for databases that don't do that. They store data differently, often as flexible documents (imagine JSON files), key-value pairs (like a dictionary), or other formats.
+
+The pitch for NoSQL is roughly: more flexibility, easier to scale to massive amounts of data, no need to define your structure upfront. This "no need to define structure" was a big part of the appeal. Just throw data in and figure out how to use it later.
+
+
+---
+
+## Where NoSQL makes sense
+
+**When speed is everything and the data is simple.** Think of things like a leaderboard in a game, user session data, or a cache. You're not doing complex queries, you just need to store something and retrieve it incredibly fast. Key-value stores like Redis are brilliant at this. A relational database would be overkill.
+
+**When your data doesn't have a fixed shape.** Imagine a product catalog where a t-shirt has "size" and "color" attributes, but a laptop has "RAM", "CPU", and "screen size". These are very different. Forcing them into the same table structure is awkward. A document store like MongoDB lets each product just be what it is.
+
+**When you're dealing with enormous scale across multiple regions.** Big tech companies (think Amazon, Netflix, or Facebook) have data spread across data centers all over the world. Some NoSQL databases are specifically built to handle that kind of scale, accepting some trade-offs (like the data not being perfectly up-to-date everywhere at all times) to stay fast.
+
+**For highly connected data, like social networks.** Ironically, one area where NoSQL really shines is *relationships*, but a specific kind. Graph databases (like Neo4j) are built to answer questions like "who are the friends of my friends who also like jazz?" across millions of people. A relational database can do this, but it gets slow fast.
+
+So yes, there are real use cases. But those use cases are pretty specific. They're not the kind of thing most apps need.
+
+***
+
+## But here's where my head still hurts
+
+The thing is, most apps aren't Netflix. Most apps I've worked on, and most apps most developers build, have data that *is* relational. Users have profiles. Profiles belong to organizations. Organizations have subscriptions. Subscriptions have invoices.
+
+That stuff has relationships. And relational databases were literally invented to model exactly that.
+
+When I look at a NoSQL document store handling that kind of data, I often see one of two things. Either the data ends up duplicated everywhere (the user's name stored in fifty different places), or the app code ends up doing the work that the database used to do - manually stitching data together, checking consistency, making sure nothing gets out of sync.
+
+That's not a win. That's moving complexity from a place designed to handle it (the database) to a place that's much worse at handling it (your application code, written by humans, at 11pm, day before Black Friday).
+
+***
+
+## Meanwhile, relational databases haven't been standing still
+
+This is something I think gets missed in the NoSQL conversation. Tools like PostgreSQL have been quietly adding features that close the gap significantly.
+
+For example - PostgreSQL has a column type called `jsonb` that lets you store flexible, document-like data *inside* a relational database. So you can have the best of both worlds - structured, relational data where you need it, and flexible blobs where you don't. And all of that in one place, with proper transactions and data integrity guarantees.
+
+Modern relational databases can also handle a lot more scale than people give them credit for. The "NoSQL scales better" argument made a lot of sense in 2010. In 2026, it's a much more nuanced picture.
+
+***
+
+## The honest downsides of NoSQL
+
+I want to be clear I'm not just being a grumpy old dev here. There are real trade-offs with NoSQL that don't always get talked about enough.
+
+**You lose consistency guarantees.** Many NoSQL databases are "eventually consistent," which means for a short time, different users might see different versions of the data. For some apps that's fine. For anything involving money or critical records, it can be a serious problem.
+
+**You become responsible for your data's integrity.** Relational databases enforce rules. For example, you can't link an order to a user that doesn't exist. With many NoSQL databases, that's your problem now. One bug in your code and you've got orphaned, inconsistent data with no safety net.
+
+**Flexible schemas are a double-edged sword.** Yes, it's nice to not have to define everything upfront. But six months into a project, when your documents all look slightly different because three developers made different assumptions, you'll wish someone had drawn a schema on a whiteboard.
+
+**Querying can get awkward.** SQL (despite its age) is a remarkably powerful and expressive way to ask questions of your data. Equivalent operations in some NoSQL databases require more code, more effort, and sometimes just aren't possible at all.
+
+***
+
+## So where does that leave me?
+
+Honestly? Still pretty relational in my thinking. And I think I'm okay with that. At least for now, until I get a project that genuinely needs NoSQL's strengths.
+
+I don't think my instinct to model data as interconnected things is a limitation from my education. I think it reflects something true about how a lot of real-world data actually works. And relational databases are really good at modeling that.
+
+Does that mean I'd never use NoSQL? No. But I'd want to be very sure I needed it before I went down that path.
+
+My overall take: **if you're building most apps, a well-used PostgreSQL database will take you further than you think, for longer than you think, with fewer surprises than you think.** And if you ever genuinely outgrow it, you'll know. And the NoSQL option will still be there and you'll be able to migrate your data if needed.
+
+I just wouldn't start there.
