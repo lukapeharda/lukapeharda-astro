@@ -2,21 +2,26 @@
 import MainLayout from '../layouts/MainLayout.astro';
 import Divider from '../components/Divider.astro';
 
-const now = new Date('2025-02-25');
+const now = new Date('2026-02-24');
 ---
 
 <MainLayout title="What I'm doing right now" description="This page tells you what I'm working on at the moment and what are my current interests">
     <div class="flex-grow bg-e6n-black light-mode:bg-white">
         <div class="h-full w-full xl:w-1/2 md:w-2/3 p-4 md:p-8 text-content">
             <p class="pb-3 text-white light-mode:text-slate-800 text-xl">This isn't an <a class="border-b border-e6n-red hover:bg-e6n-red" href="/about">about</a> page.</p>
-            <p class="text-white light-mode:text-slate-800 text-xl">It's <a class="border-b border-e6n-blue hover:bg-e6n-blue" href="https://nownownow.com/about/" target="_blank">now</a> page. It tells you what I'm working on at the moment and what are my current interests.</p>
+            <p class="text-white light-mode:text-slate-800 text-xl">It's <a class="border-b border-e6n-blue hover:bg-e6n-blue" href="https://nownownow.com/about/" target="_blank">Now</a> page. It tells you what I'm working on at the moment and what are my current interests.</p>
 
             <h1 class="text-white light-mode:text-slate-800 italic text-4xl mt-8">What I'm doing right <span class="text-e6n-yellow">now</span></h1>
             <p class="text-slate-400 light-mode:text-slate-800 text-sm pb-4">{ now.toDateString() }</p>
 
-            <p class="pb-3 text-white light-mode:text-slate-800 text-xl">I'm currently putting the finishing touches on order bumps for the <a href="https://kourses.com/" class="border-b border-e6n-blue hover:bg-e6n-blue" target="_blank">Kourses</a> checkout system. Order bumps are strategic add-on offers that appear during the checkout process, allowing customers to easily add complementary products or upgrades with a single click.</p>
-            <p class="pb-3 text-white light-mode:text-slate-800 text-xl">We wanted to make them simple to use but powerful. And I believe we achieved that.</p>
-            <p class="pb-3 text-white light-mode:text-slate-800 text-xl">Last month, we successfully launched cart abandonment recovery — a powerful feature that helps users restore failed purchases and reconnect with potential customers who left before completing their transaction.</p>
+            <p class="pb-3 text-white light-mode:text-slate-800 text-xl">A year has passed since I've updated this page and it feels like I don't have any major updates to share.</p>
+
+            <p class="pb-3 text-white light-mode:text-slate-800 text-xl">Product that I've been working on for the quite some time now (<a href="https://kourses.com/" class="border-b border-e6n-blue hover:bg-e6n-blue" target="_blank">Kourses</a>) is not selling as intended and we are going to try with cheaper plans with lower limits.</p>
+            <p class="pb-3 text-white light-mode:text-slate-800 text-xl">It feels like we just pile on features without proper user research. And what is more, without any sales strategy on how to sell these features.</p>
+
+            <Divider></Divider>
+
+            <p class="pb-3 text-white light-mode:text-slate-800 text-xl">On a personal note, last week, due to heavy snowfall, I've managed to do a backcountry snowboarding run which I hadn't been able to do in the last eight years. So I got that going for me :-)</p>
         </div>
     </div>
 </MainLayout>
