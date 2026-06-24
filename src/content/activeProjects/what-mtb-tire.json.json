@@ -1,0 +1,10 @@
+{
+    "id": "what-mtb-tire",
+    "title": "What MTB Tire",
+    "url": "https://whatmtbtire.com/?utm_source=website&utm_medium=post&utm_campaign=luka-peharda-com",
+    "description": "<p><strong>Web app for finding the best mountain bike tire for your needs based on your riding style, terrain, and bike type</strong></p>",
+    "image": "/what-mtb-tire.png",
+    "technologies": ["reactjs", "cloudflare", "d1", "tailwindcss", "wrangler", "vibecoded"],
+    "color": "red",
+    "hoverColor": "blue"
+}
