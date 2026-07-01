@@ -1,0 +1,64 @@
+---
+title: "Leave a failing test before you go on vacation"
+url: "/article/leave-a-failing-test-before-you-go-on-vacation/"
+date: "2026-07-01"
+excerpt: "Every year I dread coming back from vacation not because of the work, but because I have no idea where I left off. A failing test, a well-written TODO, and a slow first day back are all you need to ease back in."
+---
+
+import Divider from '../../components/Divider.astro';
+import H2 from '../../components/articles/H2.astro';
+import H3 from '../../components/articles/H3.astro';
+import Paragraph from '../../components/articles/Paragraph.astro';
+import Emphasis from '../../components/articles/Emphasis.astro';
+import Link from '../../components/articles/Link.astro';
+import Strong from '../../components/articles/Strong.astro';
+import Blockquote from '../../components/articles/Blockquote.astro';
+
+export const components = {
+    a: Link,
+    h2: H2,
+    h3: H3,
+    p: Paragraph,
+    hr: Divider,
+    em: Emphasis,
+    strong: Strong,
+    blockquote: Blockquote,
+};
+
+
+Every year, right before I close my laptop for a summer break, I have this moment of slight panic. Not because I'm not ready to go. But because I know what's waiting for me on the other side.
+
+Two (or three, or four) weeks from now, I'll sit down in front of that same laptop and have absolutely no idea where I left off. If you don't suffer from this type of amnesia, trust me you will, it comes with age 🙂
+
+---
+
+What I've found works best is to leave a few small, low-barrier tasks or actions right before going. Something simple but well-documented, just to get the ball rolling. No large mental barriers, no complex context to reload immediately.
+
+The best version of this I've come across: **end your last working day with a failing test**.
+
+A failing test is a pointer. It tells you exactly where you left off and what problem you were solving. No ambiguity, no archaeology. You open the test suite, see the red, and know what to do next.
+
+If a failing test doesn't fit, leave a `TODO` comment. But not `// TODO: fix this`. Something more like:
+
+```
+// TODO: Handle the case where user has no billing address.
+// See ticket #KS-1234, discussed in PR #891.
+```
+
+Write it for someone who has never seen this code before. Because in three weeks, that's essentially who you'll be.
+
+---
+
+The first day back is not a productive day. That's just the reality.
+
+Don't try to be a hero. Don't dive into a complex feature head first. Don't accept new work. Treat it as a orientation day.
+
+Before touching any code, spend time with `git log`. Read the recent commits. Read the PR descriptions. Read the review comments from the past few weeks. It takes 20-30 minutes and it tells you almost everything that happened while you were sipping margaritas. If you didn't sip margaritas, then what did you do on vacation?
+
+Then, go pick up that small task you left for yourself. Something with clear success criteria. Something where you know what "done" looks like. An early win resets your momentum faster than anything else.
+
+---
+
+When you come back, resist the urge to “make up for lost time.”
+
+Start small, finish something concrete, and let momentum rebuild naturally.
