@@ -52,24 +52,24 @@ function ProjectStatus({project}) {
 
 function ArchivedProjects({projects}) {
     return (
-        <table class="w-full border-collapse">
+        <table className="w-full border-collapse">
             <thead>
                 <tr>
-                    <th class="text-white light-mode:text-gray-800 text-xl text-left border-b border-e6n-red">Name</th>
-                    <th class="pl-2 text-white light-mode:text-gray-800 text-xl text-left border-b border-e6n-red">Year</th>
-                    <th class="pl-2 text-white light-mode:text-gray-800 text-xl text-left border-b border-e6n-red hidden md:table-cell">Description</th>
-                    <th class="pl-2 text-white light-mode:text-gray-800 text-xl text-left border-b border-e6n-red">Status</th>
+                    <th className="text-white light-mode:text-gray-800 text-xl text-left border-b border-e6n-red">Name</th>
+                    <th className="pl-2 text-white light-mode:text-gray-800 text-xl text-left border-b border-e6n-red">Year</th>
+                    <th className="pl-2 text-white light-mode:text-gray-800 text-xl text-left border-b border-e6n-red hidden md:table-cell">Description</th>
+                    <th className="pl-2 text-white light-mode:text-gray-800 text-xl text-left border-b border-e6n-red">Status</th>
                 </tr>
             </thead>
             <tbody>
                 {projects.map(project => (
                     <tr>
-                        <td class="text-white light-mode:text-gray-800 text-left py-2">
+                        <td className="text-white light-mode:text-gray-800 text-left py-2">
                             <ProjectName project={ project.data }></ProjectName>
                         </td>
-                        <td class="pl-2 text-white light-mode:text-gray-800 text-left py-2">{ project.data.year }.</td>
-                        <td class="pl-2 text-white light-mode:text-gray-800 text-left py-2 hidden md:table-cell">{ project.data.description }</td>
-                        <td class="pl-2 pt-2">
+                        <td className="pl-2 text-white light-mode:text-gray-800 text-left py-2">{ project.data.year }.</td>
+                        <td className="pl-2 text-white light-mode:text-gray-800 text-left py-2 hidden md:table-cell">{ project.data.description }</td>
+                        <td className="pl-2 pt-2">
                             <ProjectStatus project={ project.data }></ProjectStatus>
                         </td>
                     </tr>
