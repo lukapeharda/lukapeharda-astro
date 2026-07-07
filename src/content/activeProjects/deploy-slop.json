@@ -1,0 +1,10 @@
+{
+    "id": "deploy-slop",
+    "title": "Deploy Slop",
+    "url": "http://deployslop.com/?utm_source=website&utm_medium=post&utm_campaign=luka-peharda-com",
+    "description": "<p><strong>Satirical app for gathering interest for deploying vibe-coded apps and websites.</strong></p><p>Register your interest and join the fun.</p>",
+    "image": "/deploy-slop.png",
+    "technologies": ["reactjs", "vibecoded", "cloudflare", "d1", "wrangler"],
+    "color": "yellow",
+    "hoverColor": "green"
+}
