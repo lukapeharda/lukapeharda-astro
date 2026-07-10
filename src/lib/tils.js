@@ -82,5 +82,8 @@ export async function processContent(markdownContent) {
         }
     });
 
-    return code;
+    const authorMarkup = '<div class="text-gray-500 light-mode:text-gray-800 text-xs mb-4 -mt-4">Written by <span class="text-gray-200 light--mode:text-gray-900 border-b border-e6n-yellow">Luka Peharda</span></div>';
+    const codeWithAuthor = code.replace(/(<h1[^>]*>[\s\S]*?<\/h1>)/, `$1${authorMarkup}`);
+
+    return codeWithAuthor;
 }
