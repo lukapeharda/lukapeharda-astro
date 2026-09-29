@@ -1,0 +1,6 @@
+---
+const props = Astro.props;
+---
+<th {...props} class="border-b-2 border-slate-400 light-mode:border-slate-800 text-white light-mode:text-slate-800 py-2 pr-4">
+    <slot />
+</th>

@@ -1,0 +1,340 @@
+---
+title: "upsert(): The Unsung Hero of Inserting Thousands of Rows in Laravel."
+url: "/article/inserting-thousands-of-rows-in-laravel/"
+date: "2026-09-29"
+excerpt: "A request that added a product to a membership with 5,000 members timed out. Instead of hiding it on a queue, we batched the writes, fetched only what we needed and skipped the ORM, and got it down to under a second and a half."
+---
+
+import Divider from '../../components/Divider.astro';
+import H2 from '../../components/articles/H2.astro';
+import H3 from '../../components/articles/H3.astro';
+import Paragraph from '../../components/articles/Paragraph.astro';
+import Emphasis from '../../components/articles/Emphasis.astro';
+import Link from '../../components/articles/Link.astro';
+import Strong from '../../components/articles/Strong.astro';
+import Blockquote from '../../components/articles/Blockquote.astro';
+import Table from '../../components/articles/Table.astro';
+import TableHeader from '../../components/articles/TableHeader.astro';
+import TableCell from '../../components/articles/TableCell.astro';
+
+export const components = {
+    a: Link,
+    h2: H2,
+    h3: H3,
+    p: Paragraph,
+    hr: Divider,
+    em: Emphasis,
+    strong: Strong,
+    blockquote: Blockquote,
+    table: Table,
+    th: TableHeader,
+    td: TableCell,
+};
+
+
+When we started dogfooding [Kourses](https://kourses.com), our SaaS membership and course platform, we ran into performance issues that never showed up during development or regular testing.
+
+*Dogfooding is the practice of using your own software to test it against real-world scenarios and usage patterns.*
+
+Sure, if we had done proper [volume testing](https://pflb.us/blog/volume-testing-in-software-testing/) we would have probably caught some of them earlier. But it's always easy to be a general after the battle.
+
+This is the story of one of those issues, ticket KS-209, and how a request that timed out ended up running in under a second and a half.
+
+***
+
+## What went wrong?
+
+The problem showed up in our permission system.
+
+In Kourses, a membership is made of products, and a member's access is stored as permission rows. When you add a new product to an existing membership, every member of that membership needs a permission row for the new product.
+
+Simple enough. Go through the existing permissions for the membership, and for each member create a permission for the new product. If the member already has one, skip it.
+
+That works great with 50 members. It works fine with 500. With 5,000 members, the request timed out.
+
+I know, 5k is a pretty small number. But it was still a number we didn't plan for, and it never occurred to me that "this many" records could land in a single request.
+
+Here's roughly what the original code looked like:
+
+```php
+Permission::query()
+    ->where('membership_id', $membershipProduct->membership_id)
+    ->get()
+    ->each(function (Permission $permission) use ($membershipProduct) {
+        Permission::firstOrCreate([
+            'website_id' => $membershipProduct->website_id,
+            'product_id' => $membershipProduct->product_id,
+            'member_id' => $permission->member_id,
+            'membership_id' => $membershipProduct->membership_id,
+        ]);
+    });
+```
+
+It's Laravel and Eloquent, but the problem is framework-agnostic.
+
+We load every permission for the membership into memory as a full model. Then, for each one, `firstOrCreate()` fires a `SELECT` and, if nothing is found, an `INSERT`. That's up to two queries per row, thousands of round trips to the database, all inside one HTTP request.
+
+Starting point (roughly): **60,000 queries, 80,000 models, a timeout and a lot of memory.**
+
+I never got a clean profile of this version, because it never finished.
+
+***
+
+## Why not just throw it on a queue?
+
+That was my first thought. Wrap the whole thing in a job, dispatch it and let a worker deal with it.
+
+And it did fix the timeout.
+
+But it didn't fix the code. It just moved a slow, memory-hungry process somewhere the user can't see it. The worker still loads thousands of models and still hammers the database row by row. It will fall over again at 50k members, only this time quietly.
+
+So before reaching for the queue, let's see how far we can get by lowering memory usage and the number of queries.
+
+***
+
+## Do we really need to load everything at once?
+
+First, instead of `get()`, we use `chunk()`. It loads the permissions in batches of 1,000, so we never hold the whole set in memory.
+
+Second, instead of `firstOrCreate()` per row, we use `upsert()`. It inserts a whole batch in a single query and, if a row with the same unique key already exists, updates it instead of failing. That's our "skip if it already exists" logic, handled by the database.
+
+```php
+Permission::query()
+    ->where('membership_id', $membershipProduct->membership_id)
+    ->chunk(1000, function (Collection $permissions) use ($membershipProduct) {
+        Permission::upsert(
+            $permissions->map(fn (Permission $permission) => [
+                'website_id' => $membershipProduct->website_id,
+                'product_id' => $membershipProduct->product_id,
+                'member_id' => $permission->member_id,
+                'membership_id' => $membershipProduct->membership_id,
+            ])->toArray(),
+            ['website_id', 'product_id', 'member_id', 'membership_id']
+        );
+    });
+```
+
+### What is chunking?
+
+Chunking means processing a large result set in fixed-size pieces instead of loading it all at once.
+
+Under the hood, `chunk(1000, ...)` runs the same query over and over with a `LIMIT` and an increasing `OFFSET`:
+
+```sql
+select * from permissions where membership_id = ? order by id limit 1000 offset 0
+select * from permissions where membership_id = ? order by id limit 1000 offset 1000
+select * from permissions where membership_id = ? order by id limit 1000 offset 2000
+-- ...until a page comes back with fewer than 1,000 rows
+```
+
+Each page goes to your callback. When the callback returns, that page can be garbage collected before the next one loads. Memory stays flat no matter how big the table gets. 10,000 rows or 10 million, you only ever hold 1,000 at a time.
+
+That makes it the standard tool for anything that walks through a big table: backfills, data migrations, exports, sending notifications to every user, recalculating stats. Basically any "do something for each row" job where the table can grow faster than your memory limit.
+
+Chunking has its own trade-off. Every chunk is an extra query, so a chunk size of 10 would bring back the round-trip problem we're trying to escape. A size of 500 to 1,000 is usually the sweet spot.
+
+It also has one trap: you have to be careful when the callback changes the rows the query is reading. Offset pagination counts rows. If you update or delete rows that match the `where` clause, or insert new ones, the pages shift under you and rows get skipped or processed twice. Laravel's `chunkById()` avoids this by paginating with `where id > last_seen_id` instead of `OFFSET`. As a bonus, that's also faster on deep pages, because the database doesn't have to count and skip every row before the offset.
+
+### What is upsert?
+
+Upsert is a mash-up of *update* and *insert*. You hand the database a row and say "insert it, and if it already exists, update it instead". One statement, no checking first.
+
+On MySQL, Laravel's `upsert()` compiles to:
+
+```sql
+insert into permissions (website_id, product_id, member_id, membership_id)
+values (?, ?, ?, ?), (?, ?, ?, ?), (?, ?, ?, ?) -- ...one tuple per row
+on duplicate key update
+    website_id = values(website_id),
+    product_id = values(product_id),
+    member_id = values(member_id),
+    membership_id = values(membership_id)
+```
+
+On PostgreSQL and SQLite it becomes `insert ... on conflict (...) do update set ...`. It's the same idea with different syntax.
+
+The Laravel signature is `upsert(array $values, array $uniqueBy, array $update = null)`. The first argument is the rows. The second is the columns that identify a row as a duplicate. The third is the columns to overwrite when a duplicate is found. Leave it out and Laravel updates every column you passed in.
+
+In our case every column is part of the unique key, so the "update" part writes the same values back. It's effectively "insert or skip".
+
+The real win is that the check and the write happen inside the database, in one statement, for the whole batch. Compare that to `firstOrCreate()`, which asks the database whether the row exists, waits for the answer, then sends another query to create it. The upsert version also has no race condition: two requests can't both decide the row is missing and both insert it.
+
+### The unique key is what makes it work
+
+There's a catch hiding in "if the row already exists". How does the database know a row already exists?
+
+It doesn't compare your row against every other row in the table. It relies on a unique index. When an insert would put a second copy of a value into a unique index, the database raises a duplicate-key conflict. Upsert catches that conflict and turns it into an update. No unique index, no conflict, and upsert happily inserts a duplicate every time.
+
+With `firstOrCreate()`, the "does it exist?" check happened in our code. With upsert, we're handing that check to the database, and the unique index is what actually does it.
+
+In our case, one column on its own isn't unique. A member has many permissions, a product is granted to many members, and a membership contains many products. What must be unique is the *combination*: one member can have only one permission for a given product, in a given membership, on a given website. That's a composite unique key, a single index over several columns:
+
+```php
+Schema::table('permissions', function (Blueprint $table) {
+    $table->unique(['website_id', 'membership_id', 'member_id', 'product_id']);
+});
+```
+
+Any of these columns can repeat on its own. The four of them together can't.
+
+Upsert is the natural fit whenever you're syncing data: importing a CSV that may contain rows you already have, syncing records from a third-party API, bumping counters, or any write you want to be safe to run twice.
+
+If you only ever want to skip duplicates and never update them, `insertOrIgnore()` is a close cousin. Be aware that it ignores more than duplicate-key errors, though, so it can quietly swallow problems you'd want to know about.
+
+### The result
+
+Result: **75 queries, 40,008 models, 64 MB and 7.46 seconds.**
+
+From roughly 60,000 queries to 75. Much, much better. But 40k models is a lot of objects for a job that needs one column.
+
+***
+
+## Do we even need all those rows?
+
+Look at what the query actually fetches: every permission for the membership. A member with access to five products has five permission rows. We load all five, and then write the same new row five times.
+
+All we really need is the list of distinct member IDs.
+
+```php
+Permission::query()
+    ->select('member_id')
+    ->where('membership_id', $membershipProduct->membership_id)
+    ->distinct()
+    ->orderBy('member_id')
+    ->chunk(1000, function (Collection $permissions) use ($membershipProduct) {
+        Permission::upsert(
+            $permissions->map(fn (Permission $permission) => [
+                'website_id' => $membershipProduct->website_id,
+                'product_id' => $membershipProduct->product_id,
+                'member_id' => $permission->member_id,
+                'membership_id' => $membershipProduct->membership_id,
+            ])->toArray(),
+            ['website_id', 'product_id', 'member_id', 'membership_id']
+        );
+    });
+```
+
+Notice the `orderBy('member_id')`. It isn't there for looks.
+
+`chunk()` paginates with `LIMIT` and `OFFSET`, so it needs a stable order. If you don't give it one, Laravel orders by the primary key. But we're selecting only distinct `member_id` values, so there's no `id` column to order by. Ordering by `member_id` gives the pagination a stable order, and `chunk()` uses it instead of the default.
+
+Result: **36 queries, 20,009 models, 35 MB and 2.66 seconds.**
+
+Half the queries, half the memory, almost three times faster. And we're still creating 20k objects just to read one integer from each.
+
+***
+
+## Do we need Eloquent at all?
+
+Eloquent models are great. They're also expensive. Each one carries attributes, original values, casts, relations, events and a bunch of other machinery.
+
+We use none of that here. We read one column and pass it straight into an insert. The query builder returning plain `stdClass` objects will do just fine.
+
+```php
+DB::connection('website')->table('permissions')
+    ->select('member_id')
+    ->where('website_id', $membershipProduct->website_id)
+    ->where('membership_id', $membershipProduct->membership_id)
+    ->distinct() // A member has one row per product in the membership
+    ->orderBy('member_id')
+    ->chunk(1000, function (Collection $permissions) use ($membershipProduct) {
+        DB::connection('website')->table('permissions')->upsert(
+            $permissions->map(fn ($permission) => [
+                'website_id' => $membershipProduct->website_id,
+                'product_id' => $membershipProduct->product_id,
+                'member_id' => $permission->member_id,
+                'membership_id' => $membershipProduct->membership_id,
+            ])->toArray(),
+            ['website_id', 'product_id', 'member_id', 'membership_id']
+        );
+    });
+```
+
+I also added a `website_id` condition, which narrows the query and lets it make full use of the composite index from earlier. With `website_id` and `membership_id` both in the `where` clause, the database jumps straight to the matching slice of the index. Inside that slice the entries are already sorted by `member_id`, so the `distinct` and the `orderBy` come for free. And because `member_id` is in the index itself, the database never has to touch the table rows at all.
+
+Result: **36 queries, 9 models, 12 MB and 1.48 seconds.**
+
+Here's the whole journey so far:
+
+| Version | Queries | Models | Memory | Time |
+| --- | --- | --- | --- | --- |
+| Original (estimated) | ~60,000 | ~80,000 | a lot of MB | timeout |
+| Chunk + upsert | 75 | 40,008 | 64 MB | 7.46 s |
+| Distinct member IDs | 36 | 20,009 | 35 MB | 2.66 s |
+| Query builder | 36 | 9 | 12 MB | 1.48 s |
+
+*Numbers are from my local profiling runs against test products, so treat them as relative rather than absolute.*
+
+***
+
+## Now can we use the queue?
+
+Yes. Now the queue makes sense, because we're no longer hiding a problem with it. We're using it to spread out work that's already efficient.
+
+The read stays in the request and is cheap. Each batch of writes becomes its own job:
+
+```php
+DB::connection('website')->table('permissions')
+    ->select('member_id')
+    ->where('website_id', $membershipProduct->website_id)
+    ->where('membership_id', $membershipProduct->membership_id)
+    ->distinct()
+    ->orderBy('member_id')
+    ->chunk(1000, function (Collection $permissions) use ($membershipProduct) {
+        PermissionsUpsert::dispatch(
+            $permissions->map(fn ($permission) => [
+                'website_id' => $membershipProduct->website_id,
+                'product_id' => $membershipProduct->product_id,
+                'member_id' => $permission->member_id,
+                'membership_id' => $membershipProduct->membership_id,
+            ])->toArray(),
+            ['website_id', 'product_id', 'member_id', 'membership_id']
+        );
+    });
+```
+
+And the job itself is tiny:
+
+```php
+class PermissionsUpsert implements ShouldQueue
+{
+    use Dispatchable;
+    use Queueable;
+
+    public function __construct(
+        public array $batch,
+        public array $keys,
+    ) {}
+
+    public function handle(): void
+    {
+        DB::connection('website')
+            ->table('permissions')
+            ->upsert($this->batch, $this->keys);
+    }
+}
+```
+
+Each job carries plain arrays, not models, so the payload stays small and there's nothing to re-hydrate on the worker. The job uses the `DB` facade too, so the writes behave exactly like the ones we just benchmarked. If you want to go one step further, you can make the whole thing async by dispatching a single job that runs the chunked read and fans out the upsert jobs.
+
+***
+
+## What should you watch out for with upsert?
+
+A few things bit me, or almost did.
+
+**Upsert needs a unique index.** On MySQL, `upsert()` compiles to `INSERT ... ON DUPLICATE KEY UPDATE`. MySQL ignores the columns you pass as the second argument and relies on the table's primary key and unique indexes instead. No unique index on `(website_id, membership_id, member_id, product_id)` means no conflict detection, which means duplicate rows. Add the index before you switch to upsert. If the table already has duplicates, creating the index will fail, so clean them up first.
+
+**Placeholders are limited.** Every value in the upsert becomes a `?` in a prepared statement, and MySQL allows at most 65,535 of them. Go over it and you get error `1390 Prepared statement contains too many placeholders`. Divide 65,535 by the number of columns per row to get your ceiling. With 4 columns that's about 16k rows per chunk. With 6 columns, a little under 11k.
+
+**Eloquent upsert adds timestamps.** `Permission::upsert()` fills `created_at` and `updated_at` for you, while `DB::table()->upsert()` doesn't. If you switch from one to the other, either your timestamps silently stop being set or you get two extra columns per row counting against the placeholder limit. If your table has timestamp columns and you use the `DB` facade, add them to each row yourself.
+
+***
+
+## So what did we learn?
+
+Pushing the original code into a queue would have "fixed" the bug and closed the ticket. It would also have left a process that loads tens of thousands of models to copy one column, waiting to break again at a bigger number.
+
+The real fixes were boring: batch the writes, fetch only what you need and skip the ORM when you don't use it.
+
+A queue is a great place for work that's already efficient. It's a terrible place to hide work that isn't.
