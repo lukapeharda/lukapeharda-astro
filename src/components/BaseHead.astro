@@ -20,8 +20,16 @@ import GoogleAnalytics from './GoogleAnalytics.astro';
 <!-- Global Metadata -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<link rel="icon" type="image/svg+xml" href="/favicon.png" />
+<link rel="icon" type="image/png" href="/favicon.png" />
 <ViewTransitions />
+<script>
+	// Astro 2.9 view transitions replace the whole <html> element on navigation,
+	// which makes browsers drop the favicon. Re-insert it after every swap.
+	new MutationObserver(() => {
+		const icon = document.head.querySelector('link[rel="icon"]');
+		if (icon) icon.replaceWith(icon.cloneNode());
+	}).observe(document, { childList: true });
+</script>
 
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />
