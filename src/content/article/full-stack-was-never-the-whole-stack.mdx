@@ -1,0 +1,137 @@
+---
+title: "Full-stack was never the whole stack - AI just made it obvious"
+url: "/article/full-stack-was-never-the-whole-stack/"
+date: "2026-10-05"
+excerpt: "AI made writing code the cheap part. The bottleneck is now deciding what to build and checking whether it worked. Engineers who own that part are called product engineers, and you should try to become one."
+---
+
+import Divider from '../../components/Divider.astro';
+import H2 from '../../components/articles/H2.astro';
+import H3 from '../../components/articles/H3.astro';
+import Paragraph from '../../components/articles/Paragraph.astro';
+import Emphasis from '../../components/articles/Emphasis.astro';
+import Link from '../../components/articles/Link.astro';
+import Strong from '../../components/articles/Strong.astro';
+import Blockquote from '../../components/articles/Blockquote.astro';
+import UnorderedList from '../../components/articles/UnorderedList.astro';
+import OrderedList from '../../components/articles/OrderedList.astro';
+import ListItem from '../../components/articles/ListItem.astro';
+
+export const components = {
+    a: Link,
+    h2: H2,
+    h3: H3,
+    p: Paragraph,
+    hr: Divider,
+    em: Emphasis,
+    strong: Strong,
+    blockquote: Blockquote,
+    ul: UnorderedList,
+    ol: OrderedList,
+    li: ListItem,
+};
+
+
+For most of my career, and I'm nearing the 20 year mark, the slow part of software development was writing the code.
+
+That changed. Using AI agents, typing the code is rarely what holds a feature or a release back anymore.
+
+The bottleneck shifted. Now, at least in my opinion, it is deciding what to build next, and whether it worked.
+
+If you are an engineer who waits for the polished and finished spec, you are waiting for the slowest part of the process. Engineers who can do that part themselves are called product engineers. And you should try and become one.
+
+***
+
+## What is a product engineer exactly?
+
+A product engineer is a full-stack engineer who owns the whole feature. From the first customer complaint through the metric it was supposed to move to supporting that feature.
+
+The best description of the role can be found in [PostHog's Product Engineer Handbook](https://posthog.com/handbook/engineering/product-engineering). If this is the first time you're on their pages, make sure to spend some time on their handbooks, they are easily one of the best on the market.
+
+In their version, a product engineer is the one who talks to users, decides what to build, holds the trenches in support channels, owns the pricing, revenue and the user experience. Naturally, the part of writing the code and spending time on the keyboard remains the same. But the job is different.
+
+The word "works" means something else now. Passing tests and deploying code is not what makes the "code work". Code works when it fulfils the planned result - a customer whose problem was solved or revenue for the business.
+
+A software engineer starts from a ticket or a spec, asks themself *how do I build this* and talks just with the PM and other developers. When the code is merged and deployed they are mainly done with it.
+
+A product engineer starts with a customer problem. Their first question is not how to build it but *should we build this at all*. They talk with customers, support and anyone who is affected by the problem they are looking to solve. They are done with a feature when the metric moved or the information why it didn't is solid and available. They often own the idea, UX, code, docs and support.
+
+***
+
+## Why does this matter now?
+
+With AI, teams are getting smaller. When one engineer using AI agents ships what used to need three, the layers around that engineer get thinner too.
+
+Every handoff from a person to a person is a queue. A request travels from customer to support to PM to a ticket to me, and each hop drops a piece of the original problem like Chinese whispers or a broken telephone game.
+
+AI did speed up the build step. It did nothing for the queue. It even slowed it down because my PMs are using AI to generate a spec, which then adds a lot of fluff on its own and oftentimes dilutes the original problem further.
+
+Small teams need the engineer who can go from a customer conversation to a shipped fix with no relay in between.
+
+***
+
+## Is a feature request the same as the problem?
+
+Almost never.
+
+I was never a person that could take a ticket and just build it. I wanted to know where the request came from, and how we will know it worked. Or if I'm working on the correct problem.
+
+So I push back. The goal was never to say no. I wanted to hear what problem we are solving, because often the feature that was requested and the problem behind it are two different things.
+
+A feature request is the customer's guess at a solution. Customers are very good at feeling pain and not so good at designing software. You have to interview them to get to the bottom of it, and a lot gets lost when that interview happens three people away from whoever writes the code.
+
+Pushing back doesn't mean I win. I get overruled, and that is fine. My voice was heard. And I feel heard and valued.
+
+When my PM insists on a feature I don't agree with, I have a go-to question: *what am I not seeing?* I am an engineer. I don't sit in every sales call or read every cancellation reason. Sometimes there really is something I missed.
+
+The answer I hear most often is "all our competitors have this". It's a fair point for the comparison page. But a competitor having a feature only tells you they built it. It says nothing about whether their customers use it.
+
+Audio lessons on [Kourses](https://kourses.com/updates/audio-lessons/) are a fresh example. I liked the feature and still said it wouldn't move the needle. A customer told us it would solve their problem, the competitors all had it, and we built it.
+
+A month after release, one customer uses it.
+
+Maybe I was right. Maybe the feature is fine and we did a poor job after the release - too few articles, too little about what it's good for. Maybe we trusted one customer's word too much. A software engineer's job ended on release day. A product engineer has to find out which of those it was.
+
+None of this works without numbers, so you need a way to track features and their usage because "shipped" tells me nothing. I want to see whether anyone uses it.
+
+***
+
+## How do you make the shift?
+
+You don't need a new title or anyone's permission. Start here.
+
+1. **Ask why before how long.** Before you estimate anything, ask what happens if we don't build it.
+2. **Talk to the customer yourself.** Join a call. Take support tickets for a week. Read the raw request, not someone's summary of it.
+3. **Write the success metric before the code.** One number, checked two weeks after release.
+4. **Ship the smallest thing that tests the problem.** The build is cheap now, so learn from production and skip the meeting.
+5. **Own the boring edges.** Basic UX, the docs, the changelog entry. If you built it, you explain it best.
+6. **Spend the time AI gives you back on steps 1 to 5.** Not on more tickets.
+
+***
+
+## What am I still missing?
+
+Mostly a mandate.
+
+Everything in the list above I can do without asking anyone. The rest of the PostHog description is different. At my company those calls are not mine to make. Not yet.
+
+What I would need to own:
+
+- **Customer conversations.** Regular calls with the people who use what I build, not only when a ticket lands.
+- **Experiments.** Shipping a change to half the users and letting the numbers decide.
+- **Pricing.** I built the billing. I have never made a pricing call.
+- **Killing features.** Removing something because the data says nobody uses it.
+
+Nobody hands you that mandate. I have my company's trust. What I need to do now is sell the next step, and be sure I am ready to make these decisions and stand behind them.
+
+So the path from full-stack to product engineer is only half about skills. The other half is getting your company to let you be one. And how to do so is a topic for another post ;-)
+
+***
+
+## So what is left for engineers?
+
+AI took the part of the job that was easiest to measure. What is left is knowing which problem is worth solving, and checking whether you solved it.
+
+That part was always interesting to me.
+
+> **The code is the cheap part now. Understanding the problem is the job.**
