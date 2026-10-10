@@ -2,7 +2,7 @@
 import MainLayout from '../layouts/MainLayout.astro';
 import Divider from '../components/Divider.astro';
 
-const now = new Date('2026-02-24');
+const now = new Date('2026-10-10');
 ---
 
 <MainLayout title="What I'm doing right now" description="This page tells you what I'm working on at the moment and what are my current interests">
@@ -14,14 +14,14 @@ const now = new Date('2026-02-24');
             <h1 class="text-white light-mode:text-slate-800 italic text-4xl mt-8">What I'm doing right <span class="text-e6n-yellow">now</span></h1>
             <p class="text-slate-400 light-mode:text-slate-800 text-sm pb-4">{ now.toDateString() }</p>
 
-            <p class="pb-3 text-white light-mode:text-slate-800 text-xl">A year has passed since I've updated this page and it feels like I don't have any major updates to share.</p>
+            <p class="pb-3 text-white light-mode:text-slate-800 text-xl">I've shipped a trial rescue flow for <a href="https://kourses.com/" class="border-b border-e6n-blue hover:bg-e6n-blue" target="_blank">Kourses</a>. When a trial is about to end, it looks at how the account was used and drafts a personal email offering what would help - more days, a 1:1 onboarding call or a data migration. A human reviews every one before it goes out.</p>
+            <p class="pb-3 text-white light-mode:text-slate-800 text-xl">We've also added audio support to the platform, allowing users to upload and play audio files in their courses. And users can now create quizzes as part of their courses to validate members knowledge.</p>
 
-            <p class="pb-3 text-white light-mode:text-slate-800 text-xl">Product that I've been working on for the quite some time now (<a href="https://kourses.com/" class="border-b border-e6n-blue hover:bg-e6n-blue" target="_blank">Kourses</a>) is not selling as intended and we are going to try with cheaper plans with lower limits.</p>
-            <p class="pb-3 text-white light-mode:text-slate-800 text-xl">It feels like we just pile on features without proper user research. And what is more, without any sales strategy on how to sell these features.</p>
+            <p class="pb-3 text-white light-mode:text-slate-800 text-xl">On the side I'm building <a href="https://whatmtbtire.com/" class="border-b border-e6n-yellow hover:bg-e6n-yellow" target="_blank">What MTB Tire</a>, a trail tire finder that uses AI to suggest tires.</p>
 
             <Divider></Divider>
 
-            <p class="pb-3 text-white light-mode:text-slate-800 text-xl">On a personal note, last week, due to heavy snowfall, I've managed to do a backcountry snowboarding run which I hadn't been able to do in the last eight years. So I got that going for me :-)</p>
+            <p class="pb-3 text-white light-mode:text-slate-800 text-xl">I'm writing more too. The latest article is about why <a href="/article/full-stack-was-never-the-whole-stack/" class="border-b border-e6n-red hover:bg-e6n-red">full-stack was never the whole stack</a>.</p>
         </div>
     </div>
 </MainLayout>
