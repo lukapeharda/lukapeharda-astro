@@ -60,7 +60,7 @@ const { slug } = Astro.params;
 const content = await fetchGithubContent(url);
 const html = await processContent(content);
 ---
-<MainLayout title={ title } description="Collection of small tidbits of knowledge">
+<MainLayout title={ title } description="Short notes on things I learned while building software">
     <article class="relative h-full w-full bg-e6n-black light-mode:bg-white">
         <div class="xl:w-1/2 md:w-2/3 p-4 md:p-8 text-content mb-24 md:mb-0">
             <div class="til-item" set:html={ html }></div>

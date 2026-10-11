@@ -7,6 +7,6 @@ import { getCollection } from 'astro:content';
 const activeProjects = await getCollection('activeProjects');
 ---
 
-<MainLayout title="Side projects" description="List of all my side projects">
+<MainLayout title="Side projects" description="Side projects and open source: What MTB Tire, Adaptive Favicon, Laravel packages and PHP API clients">
     <ActiveProjects projects={ activeProjects } client:idle></ActiveProjects>
 </MainLayout>

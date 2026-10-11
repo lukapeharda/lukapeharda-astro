@@ -9,6 +9,6 @@ const articles = (await getCollection('article')).sort(
 );
 ---
 
-<MainLayout title="Articles" description="Articles written by Luka Peharda">
+<MainLayout title="Articles" description="Articles on Laravel, testing, estimation, refactoring and product engineering, from 19 years of building software">
     <BlogArticles articles={ articles } client:idle></BlogArticles>
 </MainLayout>
