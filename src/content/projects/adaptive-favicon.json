@@ -1,0 +1,13 @@
+{
+    "order": 3,
+    "title": "Adaptive Favicon",
+    "url": "https://adaptivefavicon.com/?utm_source=website&utm_medium=post&utm_campaign=luka-peharda-com",
+    "year": 2025,
+    "status": "Active",
+    "description": "<p><strong>Simple web app that generates adaptive favicons that change with the user's system theme (light/dark mode).</strong></p><p>Generate your own adaptive favicon and make your website more engaging.</p>",
+    "why": "<p>To test how far AI-assisted \"vibe coding\" can take a small product from idea to production. Gave it to a couple of builders to see how they compare (V0, Firebase and Antigravity).</p>",
+    "learned": "<p>Firebase (at the time) was the only one to create a functional website from basic prompt. SVG favicons can carry their own <code>prefers-color-scheme</code> media queries, and browser support for them is uneven, so you need a fallback.</p>",
+    "image": "/adaptive-favicon-2.png",
+    "technologies": ["reactjs", "nextjs", "svg", "tailwindcss", "firebase"],
+    "color": "green"
+}

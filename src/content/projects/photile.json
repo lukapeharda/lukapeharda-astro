@@ -1,0 +1,13 @@
+{
+    "order": 4,
+    "title": "Photile.co",
+    "url": "https://photile.co/?utm_source=website&utm_medium=post&utm_campaign=luka-peharda-com",
+    "year": 2017,
+    "status": "Dead",
+    "description": "<p><strong>Web app that generates a photo grid (tile, mosaic) from your own Instagram photos.</strong></p><p>Select the number of rows and columns and filter out unwanted photos.</p>",
+    "why": "<p>Mostly an excuse to learn Go and try serverless on a real project. I also wanted a grid of my own Instagram photos and nothing simple existed. And it was a small attempt at a paid indie product.</p>",
+    "learned": "<p>Platform risk. Instagram retired its legacy API and Photile died with it, so I don't build a product on someone else's API without a plan B anymore. On the technical side, I learned Go's concurrency and image handling for compositing photos plus using microservice architecture.</p>",
+    "image": "/photile-1.jpg",
+    "technologies": ["go", "react", "redux", "serverless", "now.sh", "microservice", "vercel", "netlify"],
+    "color": "red"
+}

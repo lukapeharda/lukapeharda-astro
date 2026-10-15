@@ -1,0 +1,13 @@
+{
+    "order": 5,
+    "title": "Tiny Wins",
+    "url": "https://tinywins.today/?utm_source=website&utm_medium=post&utm_campaign=luka-peharda-com",
+    "year": 2020,
+    "status": "Dead",
+    "description": "<p><strong>Web app for tracking your habits and wins, no matter how small.</strong></p><p>Track your wins, make a habit out of them and get inspired by other users and their wins.</p>",
+    "why": "<p>Mainly my own need: tracking small wins kept me motivated in 2020. It was also a chance to try Recoil and Laravel Sanctum SPA authentication, and to build a small community product.</p>",
+    "learned": "<p>Distribution beats code. Building it was the easy(ish) part. Social features need a critical mass of users, and getting people in was the real work which I wasn't prepared for.</p>",
+    "image": "/tinywins-1.png",
+    "technologies": ["reactjs", "recoil", "laravel", "sanctum", "tailwindcss"],
+    "color": "yellow"
+}

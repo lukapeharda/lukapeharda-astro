@@ -10,28 +10,20 @@ const article = defineCollection({
     }),
 });
 
-const activeProjects = defineCollection({
+const projects = defineCollection({
     type: 'data',
     schema: z.object({
-        id: z.string(),
+        order: z.number(),
         title: z.string(),
         url: z.string(),
+        year: z.number(),
+        status: z.enum(['Active', 'Zombie', 'Dead']),
         description: z.string(),
+        why: z.string(),
+        learned: z.string(),
         image: z.string(),
         technologies: z.array(z.string()),
-        color: z.enum(['red', 'yellow', 'green', 'blue']),
-        hoverColor: z.enum(['red', 'yellow', 'green', 'blue'])
-    }),
-});
-
-const archivedProjects = defineCollection({
-    type: 'data',
-    schema: z.object({
-        name: z.string(),
-        year: z.number(),
-        description: z.string(),
-        status: z.enum(['Zombie', 'Dead', 'Active', 'Active Development']),
-        url: z.string().optional()
+        color: z.enum(['red', 'yellow', 'green', 'blue'])
     }),
 });
 
@@ -57,4 +49,4 @@ const podcastRecommendations = defineCollection({
 });
 
 
-export const collections = { article, archivedProjects, activeProjects, bookRecommendations, podcastRecommendations };
+export const collections = { article, projects, bookRecommendations, podcastRecommendations };

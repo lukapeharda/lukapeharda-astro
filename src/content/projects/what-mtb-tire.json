@@ -1,0 +1,13 @@
+{
+    "order": 1,
+    "title": "What MTB Tire",
+    "url": "https://whatmtbtire.com/?utm_source=website&utm_medium=post&utm_campaign=luka-peharda-com",
+    "year": 2026,
+    "status": "Active",
+    "description": "<p><strong>Web app for finding the best mountain bike tire for your riding style, terrain and bike type.</strong></p>",
+    "why": "<p>I ride MTB, and picking tires is confusing for everyone, so I wanted to build a small app that helps with the decision using AI models. It was also a good reason to learn Cloudflare Workers and D1.</p>",
+    "learned": "<p>Learned how to turn fuzzy rider input (terrain, riding style, bike) into a scoring model using AI that gives sensible recommendations.</p>",
+    "image": "/what-mtb-tire.png",
+    "technologies": ["reactjs", "cloudflare", "d1", "tailwindcss", "wrangler"],
+    "color": "red"
+}

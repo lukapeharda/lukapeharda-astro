@@ -12,5 +12,8 @@ export default defineConfig({
   experimental: {
     viewTransitions: true
   },
+  redirects: {
+    '/projects/list': '/projects/'
+  },
   output: 'static'
 });

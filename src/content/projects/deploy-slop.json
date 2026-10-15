@@ -1,0 +1,13 @@
+{
+    "order": 2,
+    "title": "Deploy Slop",
+    "url": "http://deployslop.com/?utm_source=website&utm_medium=post&utm_campaign=luka-peharda-com",
+    "year": 2026,
+    "status": "Active",
+    "description": "<p><strong>Satirical app for gathering interest in deploying vibe-coded apps and websites.</strong></p><p>Register your interest and join the fun.</p>",
+    "why": "<p>To poke fun at the flood of vibe-coded apps going straight to production and to give Claude design tools a test.</p>",
+    "learned": "<p>Shipping fast. Reusing my own Cloudflare stack and boilerplate got a joke from idea to live in an evening, and reusable boilerplate is a superpower. Design itself is an AI slop which adds to the satire.</p>",
+    "image": "/deploy-slop.png",
+    "technologies": ["reactjs", "cloudflare", "d1", "wrangler", "claude-design"],
+    "color": "yellow"
+}

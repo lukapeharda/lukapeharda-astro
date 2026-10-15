@@ -1,12 +1,18 @@
 ---
 import MainLayout from '../layouts/MainLayout.astro';
-import ActiveProjects from '../components/ActiveProjects.jsx';
+import Projects from '../components/Projects.jsx';
 
 import { getCollection } from 'astro:content';
 
-const activeProjects = await getCollection('activeProjects');
+const projects = (await getCollection('projects'))
+    .sort((a, b) => a.data.order - b.data.order);
 ---
 
-<MainLayout title="Side projects" description="Side projects and open source: What MTB Tire, Adaptive Favicon, Laravel packages and PHP API clients">
-    <ActiveProjects projects={ activeProjects } client:idle></ActiveProjects>
+<MainLayout title="Side projects" description="Side projects by Luka Peharda built with Go, React, Next.js, Cloudflare Workers and Laravel: what they are, why I built them and what I learned">
+    <div class="w-full xl:w-1/2 md:w-2/3 p-4 md:p-8 text-content bg-e6n-black light-mode:bg-white">
+        <h1 class="text-white light-mode:text-gray-800 text-4xl italic mb-4">Side projects</h1>
+        <p class="pb-3 text-white light-mode:text-gray-800 text-xl">Side projects are where I try stacks and ideas outside my day-to-day PHP and Laravel work. Each one has a reason it exists and a lesson I took from it.</p>
+        <p class="text-white light-mode:text-gray-800 text-xl">Some are alive, some are <span class="text-e6n-red">dead</span>. I keep both here on purpose.</p>
+    </div>
+    <Projects projects={ projects }></Projects>
 </MainLayout>
