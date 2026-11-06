@@ -1,0 +1,93 @@
+---
+title: "Use it or lose it"
+url: "/article/use-it-or-lose-it/"
+date: "2026-11-05"
+excerpt: "Skill atrophy works like any other atrophy, and the fix is the same, use the skill. One AI-free day a week is how I’m attempting it."
+---
+
+import Divider from '../../components/Divider.astro';
+import H2 from '../../components/articles/H2.astro';
+import H3 from '../../components/articles/H3.astro';
+import Paragraph from '../../components/articles/Paragraph.astro';
+import Emphasis from '../../components/articles/Emphasis.astro';
+import Link from '../../components/articles/Link.astro';
+import Strong from '../../components/articles/Strong.astro';
+import Blockquote from '../../components/articles/Blockquote.astro';
+import UnorderedList from '../../components/articles/UnorderedList.astro';
+import OrderedList from '../../components/articles/OrderedList.astro';
+import ListItem from '../../components/articles/ListItem.astro';
+
+export const components = {
+    a: Link,
+    h2: H2,
+    h3: H3,
+    p: Paragraph,
+    hr: Divider,
+    em: Emphasis,
+    strong: Strong,
+    blockquote: Blockquote,
+    ul: UnorderedList,
+    ol: OrderedList,
+    li: ListItem,
+};
+
+## How do you prevent any kind of atrophy?
+
+Muscles you don't use get weaker. Languages you don't speak often fade. So why do you think skills are any different?
+
+Skills you don't practice atrophy. So the fix is quite obvious if not boring. You just need to keep using the skill. Or at the very least, maintain it.
+
+The skill that I'm talking about here and that I've started to neglect (as many of us do) is writing code and critical thinking, in some extent.
+
+---
+
+## What does using AI daily actually cost us?
+
+I use AI every day for coding. And for many other tasks as well. By AI I mean LLM and tools like Claude Code, ChatGPT, GitHub Copilot, and similar. They are fast and genuinely useful. But they come with a cost that rearly appears in the sprint report.
+
+* **Cognitive debt.** Even though I review every line that AI writes, but reviewing the code is not the same as writing it myself. My mental model of the system gets a little thinner with every line and change I didn't build or write myself.
+* **Less engagement.** When an AI agent writes the code, I don't feel as attached to it or to its result. Seems like somone else's work that I just happend to approve.
+* **Weaker critical thinking.** When reviewing AI generated code and their answers (which are very plausible), I don't feel like I'm using the same "muscles" as producing them myself.
+* **Shallow skill building.** I'm not gonna say I've stopped learning. I do. And AI is a great tool for learning. But I feel like the knowledge I gain is shallow. The same as if you just watch YouTube videos of someone programming or reading a blog article without doing it yourself. I'm learning new APIs, patterns, tools and new programming languages every week. But I don't do a deep dives into any of them.
+
+These scares me. Especially the last two.
+
+---
+
+## What is "No AI Fridays"?
+
+"No AI Fridays" is a practice I've adopted from [noaifridays.com](https://noaifridays.com/) which got [discussed on Hacker News](https://news.ycombinator.com/item?id=49498095) too. Idea behind it is that for one day a week you don't use AI. No chat, no agents, no autocomplete. Just my (or you), the editor, the docs, Google or StackOverflow and the problem.
+
+Why Fridays? Because usually the Fridays are less intense than other weekdays, And on most companies less stressful. I definitely wouldn't recommend trying this on a Monday :-)
+
+It sounds trivial. It isn't :-) It is a lot harder than it looks. At least it was for me.
+
+When starting, I didn't have problem with writing the code or thinking through the problems. My skills didn't atrophy as much yet. Problem was that I kept reaching for my trusted helper and a sidekick. You have no idea how many times I've opened an AI chat window. Even worse, I kept using AI without realising it. I have GitHub Copilot in VS Code and it was "autocompleting" whole chunks of code for me until I noticed this and realized that this needs to be paused as well.
+
+That's the sneaky part. AI is so baked into our tools that turning them off takes a deliberate practice. So much so that I'm contemplating of building a simple toolbar app to help me enforce "No AI Fridays".
+
+This is my second No AI Friday, and let me tell you, it is still challenging but easier than the first one. First one was awful.
+
+---
+
+## How do you actually start?
+
+I'm going to list a few things that helped me get started. Or that I wished I'd done from the start:
+
+1. **Start slow.** Leave the "easy" work for Friday. Small bug fixes, minor refactoring, a feature which doesn't require deep thinking or complex problem-solving. Something akin to [leaving a failing test before you go on vacation](/article/leave-a-failing-test-before-you-go-on-vacation/). It's more important to get started than proving a point that you are still master of your skills.
+2. **Prepare your environment.** Audit your tools and check your editor for AI extensions, plugins or inline completions. They are integrated seamlessly into a lot of tools and takes a great effort to recognize them and to disable them.
+3. **Remove the temptation.** Close the chat tabs. Close CLI and desktop apps. Better yet, block the URLs of AI tools and websites you usually rely on.
+
+---
+
+## Does this trend have a future?
+
+I believe we'll soon see a variant of [Show HN](https://news.ycombinator.com/showhn.html) for tools, websites and apps built without the AI.
+
+Some communities have already started and drawing lines. Some subreddits (like [r/opensource](https://www.reddit.com/r/opensource/)), ban showcasing projects built with AI entirely or vibecoded. Others, (like [r/golang](https://www.reddit.com/r/golang/)) ask for clear disclosure.
+
+I think "built without AI" will become recognized and valued, much the same way as "handmade" is in the physical world.
+
+I'm not anti-AI. I'll be back hanging with my AI sidekick on Monday. But I want to be the engineer who uses AI because it's faster. Not because I can't do it myself.
+
+** AI should be a tool, not a crutch. So you owe yourself to put it down for at least one day a week and prove to yourself you can still build without it.**
