@@ -118,8 +118,10 @@ Here's how it reacts to typical edits of a quiz question:
 | None, or only case and punctuation | 1.00 |
 | One word added | 0.96 |
 | Light rephrase ("In which year" to "What year") | 0.86 |
-| Fully reworded, same meaning | 0.55 |
+| Fully reworded (same question, different words) | 0.55 |
 | Replaced with a different question | 0.11 |
+
+ROUGE doesn't understand meaning, only words. A question reworded into the creator's own voice scores low even if it asks the same thing. For us that's fine: a rewrite is still time the creator spent that the AI should have saved.
 
 There is a catch. ROUGE needs a reference. It can only tell you how close two texts are if you have a "right" version to compare against. In most eval setups, that's the hard part. In ours, the creator writes it every time they hit publish.
 
