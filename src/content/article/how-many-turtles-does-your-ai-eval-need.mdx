@@ -1,0 +1,198 @@
+---
+title: "How many turtles does your AI eval need?"
+url: "/article/how-many-turtles-does-your-ai-eval-need/"
+date: "2026-11-25"
+excerpt: "Usage numbers don't tell you if your AI output is any good. Instead of building an LLM-as-a-judge eval pipeline, we measured AI quiz quality by comparing generated questions with what creators actually published, using a twenty-year-old metric and no model at all."
+---
+
+import Divider from '../../components/Divider.astro';
+import H2 from '../../components/articles/H2.astro';
+import H3 from '../../components/articles/H3.astro';
+import Paragraph from '../../components/articles/Paragraph.astro';
+import OrderedList from '../../components/articles/OrderedList.astro';
+import UnorderedList from '../../components/articles/UnorderedList.astro';
+import ListItem from '../../components/articles/ListItem.astro';
+import Emphasis from '../../components/articles/Emphasis.astro';
+import Link from '../../components/articles/Link.astro';
+import Strong from '../../components/articles/Strong.astro';
+import Table from '../../components/articles/Table.astro';
+import TableHeader from '../../components/articles/TableHeader.astro';
+import TableCell from '../../components/articles/TableCell.astro';
+
+export const components = {
+    a: Link,
+    h2: H2,
+    h3: H3,
+    p: Paragraph,
+    hr: Divider,
+    em: Emphasis,
+    strong: Strong,
+    ol: OrderedList,
+    ul: UnorderedList,
+    li: ListItem,
+    table: Table,
+    th: TableHeader,
+    td: TableCell,
+};
+
+You've shipped a new feature that uses AI to generate content, recommendations, or predictions. The demo looks great. All bells and whistles are there and it is working flawlessly.
+
+You are tracking usage, and people use it! But are they actually happy with what the AI generates? Usage alone doesn't tell you that. This is the wall every team that ships generative AI features eventually hits.
+
+---
+
+With "regular" software, "it works" is easy to define. You cover it with tests and you're done.
+
+Generated content doesn't work like that. When you ask AI to write a product description, summarise a meeting or create quiz questions, there isn't a single correct answer. Run it twice on the same input and you may get different output. There are plenty of good results, and plenty of bad ones.
+
+There is a better approach. In the AI world it is called "evals".
+
+---
+
+## What does an eval look like?
+
+An *eval* is a quality check for things that don't have one right answer. Instead of checking for an exact result, you define criteria for what good looks like and then run AI over a set of examples and score the outputs against those criteria.
+
+The process looks roughly like this:
+
+1.  **Define what "good" means.** Write the criteria down. For a meeting summary, that might be whether it is accurate, complete and short, with no invented decisions. Vague criteria give you vague scores.
+2.  **Collect examples.** A fixed set of inputs to test on, ideally with examples of what a good output looks like. This is your test set, and it stays the same so results can be compared over time.
+3.  **Pick your graders.** Something has to look at each output and score it. More on graders in a second, because that's where the money goes.
+4.  **Test before you ship.** Every time you change the prompt you give the AI or switch to a different model, run the test set again and compare scores. This catches things that got worse before your users do.
+5.  **Keep watching after you ship.** Score a sample of real outputs, because real users never look exactly like your test set. Look at what failed, adjust, run it again.
+
+---
+
+## Who grades the output?
+
+There are three kinds of graders, and most setups mix them.
+
+**Simple rules.** Automatic checks to see if the output is the right length, in the right format and includes everything it must. Cheap, fast, boring and very reliable. They catch broken output, not bad output.
+
+**Humans.** The gold standard, and the slowest and most expensive one. Someone reads outputs and labels them good or bad. You always need some of this, if only to check the other graders.
+
+**LLM-as-a-judge.** Use one AI model to grade another. Give a strong model your criteria, the input and the output, and ask it to score the result. Is the summary accurate? Does it invent anything? Is it clear?
+
+It works better than you'd expect, because checking is easier than creating. In several studies, GPT-4 as a judge agreed with human raters 85% of the time. Humans agreed with each other 81% of the time.
+
+But it comes with baggage. Judges prefer longer answers, prefer whichever option they see first, and tend to like their own output. Honestly, very relatable. And a judge is an AI too, so you need humans to label a set of examples just to check that the judge is right. Which raises the question: who judges the judge? Most often you, on a Sunday afternoon, with a spreadsheet 😀
+
+---
+
+## Do you actually need all of this?
+
+A test set, written criteria, a judge model, humans checking the judge. Each piece makes sense on its own. Stack them up and you've built a second AI product whose only job is to watch the first one. It's turtles all the way down, and you pay every turtle.
+
+It's not wrong. For some problems, it's exactly right. If the AI gives medical advice, or there's no human between the model and the person reading its output, you want every check you can get.
+
+But before you pick up the toolbox, write down your actual requirement in one sentence. Then ask which of these steps that sentence really needs.
+
+---
+
+## What was our requirement?
+
+For [Kourses](https://kourses.com) we added an [AI quiz generation feature](https://kourses.com/updates/course-quizzes-are-live/) to our platform. A course creator clicks a button, and the AI generates quiz questions from the course and lesson content. They can review and edit the questions, reorder them as needed, and then publish the quiz.
+
+When the "does it work?" question came up, we wanted a real number, not "it worked on the first five examples I tried" or "nobody complained". Our requirement was to answer the question "did course creators find the AI-generated questions good enough to use?" Not "are these questions covered by the lessons" or "would an expert teacher ask them". We're in the business of saving creators time, so if they had to rewrite the questions, the AI didn't move the needle.
+
+We had a lucky break: quizzes have to be published. If a creator publishes without significant edits, the AI got it right. If they rewrote it first, it didn't. Look for signals that already exist in your workflow instead of inventing new ways to collect feedback.
+
+So all we had to do was compare the generated questions with the published ones. No LLM grader, no human in the loop.
+
+---
+
+## How do you compare text without a model?
+
+People have been doing it since 2004, back when "generative AI" was T9 on your Nokia. [ROUGE](https://aclanthology.org/W04-1013.pdf) (Lin, 2004) was built to score machine-written summaries against human-written ones. No model, no API call. Same input, same score, every time. Deterministic (a buzzword every AI aficionado likes to see).
+
+### How ROUGE works
+
+ROUGE has a few variants. The one that fits short texts best is ROUGE-L. Put the two versions side by side and find the longest chain of words that appears in both, in the same order. Skipping words in between is allowed. The longer that shared chain is relative to the two texts, the closer the score gets to 1.
+
+Take "In which year did the war end?" (7 words) and "What year did the war end?" (6 words). The shared chain is "year did the war end", 5 words. Count it twice, divide by both lengths together: 10 / 13 = 0.77. Change nothing and you get 1. Replace everything and you get roughly 0.
+
+Here's how it reacts to typical edits of a quiz question:
+
+| Edit | ROUGE-L |
+| --- | --- |
+| None, or only case and punctuation | 1.00 |
+| One word added | 0.96 |
+| Light rephrase ("In which year" to "What year") | 0.86 |
+| Fully reworded, same meaning | 0.55 |
+| Replaced with a different question | 0.11 |
+
+There is a catch. ROUGE needs a reference. It can only tell you how close two texts are if you have a "right" version to compare against. In most eval setups, that's the hard part. In ours, the creator writes it every time they hit publish.
+
+---
+
+## What does that look like in Kourses?
+
+We needed to implement three things in order for this to work:
+
+* **Keep a snapshot with keys.** The quiz the user edits is live data, so when the AI generates a quiz we store a frozen copy of the questions. Each generated question gets a key, and the live question keeps that key. Matching by key means reordering questions costs nothing. Users move questions around all the time, and that says nothing about quality.
+* **Count deleted and added questions.** A generated question that's missing from the published quiz scores 0. So does a question the user wrote themselves, because the AI missed something they wanted. Ignore those and a user who deletes half the quiz gives you a perfect score. That's not a metric, that's a participation trophy.
+* **Score each question, not the whole quiz.** Compare each published question to its own original with ROUGE-L, then average. One rewritten question shouldn't blur into the rest.
+
+In code, it fits in one short function. ROUGE-L comes from [Violet](https://github.com/lukapeharda/violet), a small PHP package I wrote for this (rouge + bleu = violet) 🫣
+
+```php
+public function score(array $generated, iterable $published): float
+{
+    // $generated: snapshot, generated_key => question text
+    $scores = [];
+
+    foreach ($published as $question) {
+        $original = $generated[$question->generated_key] ?? null;
+
+        // The user wrote this one themselves: the AI missed it.
+        if ($original === null) {
+            $scores[] = 0.0;
+            continue;
+        }
+
+        $scores[] = $this->rouge->rougeL($question->text, $original)->f1;
+        unset($generated[$question->generated_key]);
+    }
+
+    // Whatever is left in the snapshot, the user deleted.
+    array_push($scores, ...array_fill(0, count($generated), 0.0));
+
+    return $scores === [] ? 1.0 : array_sum($scores) / count($scores);
+}
+```
+
+It runs in the background when a quiz is published for the first time, and stores the score next to the prompt version that generated the quiz. Later edits don't count. By then the user is maintaining their course, not correcting the AI.
+
+A five-question quiz where the user kept two questions, lightly rephrased one, rewrote one and replaced the last one scores 0.58. Next to it, we track the share of questions published unchanged, which is the number that's easiest to explain in a meeting.
+
+---
+
+## Did the new prompt actually help?
+
+This is where having a number really pays off. Without one, you tweak the prompt, generate a few quizzes, and they look better. You remember the one bad question it fixed. You don't notice the three it quietly broke.
+
+Because every score is stored with the prompt version that produced it, "is v2 better than v1?" becomes a single database query (`GROUP BY prompt_version`). Average score, share of unchanged questions, done.
+
+Notice that this covers steps 4 and 5 of the eval process from earlier, testing changes and watching real outputs, without a test set or a judge. Our users are the dataset and the grader.
+
+A few rules keep that comparison honest:
+
+* Wait for enough quizzes. Dozens per version, not a handful. Five quizzes is an anecdote with a decimal point.
+
+* Compare like with like. Some creators rewrite everything into their own voice no matter what you generate. Compare versions over the same period and the same kinds of courses.
+
+* Change one thing at a time. Swap the model and rewrite the prompt in the same release, and you'll never know which one moved the needle.
+
+The needle moves slower than a judge would tell you, because you wait for real users to publish. But it moves in the direction your users care about.
+
+---
+
+## Is it perfect?
+
+No. A user who publishes without reading gives you a perfect score. A user who hates the quiz and never publishes gives you no score at all, so maybe track how many generated quizzes get published too. And fixing one wrong fact scores almost the same as a cosmetic tweak.
+
+If any of those start to matter, that's the moment to add a piece of the bigger eval toolbox, like a judge that checks only the questions published unchanged. Add it because a requirement asks for it, not because the process has a slot for it.
+
+For now, it answers the question we actually had, on every quiz, for free. An LLM judge would answer a different question, on a sample, for a fee.
+
+Before you reach for a model to evaluate your model, check whether the answer is already in your database.
